@@ -1,0 +1,50 @@
+﻿	CREATE TABLE TRABALHADOR (
+		idTrabalhador INTEGER NOT NULL,
+		nome VARCHAR(45) NOT NULL	,
+		dataNascimento VARCHAR(10),
+		especialidade VARCHAR(20) ,
+		PRIMARY KEY(idTrabalhador) 
+	);
+
+INSERT INTO TRABALHADOR (idTrabalhador, nome,dataNascimento,especialidade)
+	 VALUES(01,'Alberto', '17/04/1984','Jardineiro'),
+	 (02,'Maria', '10/12/1990','Hortelão'),
+	 (03,'James', '15/05/1995','Agrônomo');
+	 
+INSERT INTO TRABALHADOR (idTrabalhador, nome,dataNascimento,especialidade)	
+VALUES   (04,'Patrícia','20/04/1999','Jardineiro'),
+	 (05,'Fred','12/01/1980','Hortelão'),
+	 (06,'Peter', '27/08/1987','Jardineiro');	
+	
+
+	CREATE TABLE PRODUTO (
+
+		idProduto INTEGER NOT NULL,
+		descrição VARCHAR(40) NOT NULL,
+		areaPlantada INTEGER NULL,
+		idTrabalhador INTEGER NOT NULL REFERENCES TRABALHADOR,
+		PRIMARY KEY(idProduto)
+	);
+INSERT INTO PRODUTO (idProduto, descrição , areaPlantada)
+	VALUES(01,'')
+
+	CREATE TABLE COMPRADOR (
+		idComprador INTEGER NOT NULL ,
+		nomeComprador VARCHAR(40) NOT NULL,
+		cidadeComprador VARCHAR(40) NOT NULL,
+		telefoneComprador VARCHAR(11) NULL,
+		PRIMARY KEY(idComprador)
+	);
+
+
+	CREATE TABLE VENDA (
+		idVenda INTEGER NOT NULL,
+		idComprador INTEGER NOT NULL REFERENCES COMPRADOR,
+		idProduto INTEGER NOT NULL REFERENCES PRODUTO,
+		dataVenda VARCHAR(10) NOT NULL,
+		quantidade INTEGER NULL,
+		valor INTEGER NOT NULL,
+		PRIMARY KEY (idVenda)
+		
+		);
+

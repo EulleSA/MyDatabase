@@ -1,0 +1,23 @@
+1)
+
+CRIANDO UM BANCO :
+
+CREATE DATABASE postgres
+  WITH OWNER = postgres
+	ENCODING = 'UTF8'
+        TABLESPACE = pg_default
+        LC_COLLATE = 'pt_BR.UTF-8'
+        LC_CTYPE = 'pt_BR.UTF-8'
+        CONNECTION LIMIT = -1;
+
+CRIANDO TABELAS :
+
+	CREATE TABLE TRABALHADOR (
+		idTrabalhador INTEGER NOT NULL,
+		nome VARCHAR(45) NULL	,
+		dataNascimento VARCHAR(10),
+		especialidade VARCHAR(20) ,
+		PRIMARY KEY(idTrabalhador) 
+)
+;
+

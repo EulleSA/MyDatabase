@@ -1,0 +1,116 @@
+﻿CREATE TABLE CLIENTE(
+	idCliente INTEGER NOT NULL,
+	nomeCliente VARCHAR(40) NOT NULL,
+	email VARCHAR(20) NOT NULL,
+	endereco VARCHAR(45) NOT NULL,
+	telefone VARCHAR(15),
+	PRIMARY KEY(idCliente)
+	);
+	
+CREATE TABLE SERVICOS(
+	idServicos INTEGER NOT NULL,
+	Cliente_idCliente INTEGER NOT NULL REFERENCES CLIENTE,
+	ano INTEGER NOT NULL,
+	descricaoServico VARCHAR(120),
+	dataServico DATE NOT NULL,
+	PRIMARY KEY(idServicos)
+	);
+
+CREATE TABLE ORCAMENTO(
+	idOrcamento INTEGER NOT NULL,
+	Servicos_idServicos INTEGER NOT NULL REFERENCES SERVICOS,
+	descricaoSubServico VARCHAR(50) NOT NULL,
+	situacao VARCHAR(20) ,
+	dataInicio DATE NULL,
+	dataFim DATE NULL,
+	quantidadeHoras INTEGER NULL,
+	PRIMARY KEY(idOrcamento)
+
+	);
+
+
+INSERT INTO CLIENTE
+VALUES(1,'Armando','armando@bol.com','Rua Ajuara','(84)2056-0436'),
+	(2,'Perisvaldo','peri@avo.com','Rua Mamamia','(84)3045-0574'),
+	(3,'Percival','percival@bol.com','Avenida do Matuto','(84)7595-4525'),
+	(4,'Amanda','amanda@gmail.com','Rua dos Anormais','(84)4585-5425');
+
+INSERT INTO SERVICOS
+VALUES(1,3,'2016','Jardinagem','2016-04-12'),
+      (2,2,'2016','Eletricista','2016-06-15'),
+      (3,4,'2017','Encanamento','2017-01-05'),
+      (4,1,'2017','Pintura','2017-01-04'),
+      (5,3,'2017','Pintura','2017-03-21');
+
+INSERT INTO ORCAMENTO
+VALUES(1,1,'Poda de árvores','Finalizado','2016-04-15','2016-04-22',56),
+      (2,2,'Trocar a resistência dos chuveiros','Finalizado','2016-06-18','2016-06-19',2),
+      (3,3,'Concerto de cano quebrado','Finalizado','2017-01-07','2017-01-07',4),
+      (4,4,'Pintura completa da casa','Finalizado','2017-01-07','2017-01-18',44),
+      (5,5,'Pintura do portão','Finalizado','2017-03-23','2017-03-26',18);
+-- CRIAÇÃO DA VIEW E FUNCIONAMENTO DA MESMA
+CREATE VIEW vw_Servicos_Clientes as 
+SELECT cl.nomeCliente, s.descricaoServico , o.descricaoSubServico, o.dataInicio, o.dataFim, o.quantidadeHoras,o.situacao
+FROM SERVICOS s
+	JOIN CLIENTE cl on s.Cliente_idCliente = cl.idCliente
+	JOIN ORCAMENTO o on s.idServicos = o.Servicos_idServicos
+
+SELECT * FROM vw_Servicos_Clientes
+
+
+
+
+
+--CRIAÇÃO E FUNCIONAMENTO DA TRIGGER SERVIÇOS
+
+CREATE FUNCTION servicos_gatilhos() RETURNS trigger AS $servicos_gatilhos$
+BEGIN
+	-- Verificar se o valor do atributo ano é válido
+	IF NEW.ano != 2017 THEN
+		RAISE EXCEPTION 'O Ano deve ser o atual';
+	END IF;
+RETURN NEW;
+END;
+$servicos_gatilhos$ LANGUAGE plpgsql;
+
+INSERT INTO SERVICOS 
+VALUES(8,4,'2016','Jardinagem','2016-07-15');
+
+CREATE TRIGGER servicos_inserts BEFORE INSERT OR UPDATE 
+on SERVICOS
+FOR EACH ROW EXECUTE
+PROCEDURE servicos_gatilhos();
+
+--FIM DA TRIGGER E DO FUNCIONAMENTO
+
+
+--CRIAÇÃO E FUNCIONAMENTO DA TRIGGER ORÇAMENTO
+CREATE FUNCTION orcamento_trigger() RETURNS trigger AS $orcamento_trigger$
+BEGIN 
+	IF (DATE_PART('day', NEW.dataFim::timestamp - NEW.dataInicio::timestamp) < 0) THEN
+		RAISE EXCEPTION 'A data final não pode ser menor que a inicial';
+	END IF;
+
+	IF (NEW.dataFim IS NULL ) THEN
+		RAISE EXCEPTION 'O valor do atributo situação só poderá ser igual a ‘Finalizado’ se dataFinal for diferente de null';
+	END IF;
+		
+
+RETURN NEW;
+END;
+$orcamento_trigger$ LANGUAGE plpgsql;
+
+
+CREATE TRIGGER orcamento_insert BEFORE INSERT OR UPDATE 
+on ORCAMENTO
+FOR EACH ROW EXECUTE
+PROCEDURE orcamento_trigger();
+
+
+INSERT INTO ORCAMENTO
+VALUES(11,3,'Poda de árvores','Finalizado','2017-04-15',NULL,1);
+
+--FIM DA TRIGGER E DO FUNCIONAMENTO
+
+
+	
