@@ -65,8 +65,17 @@ CREATE TABLE Produto (
 	nomeProduto VARCHAR(45) NOT NULL,
 	tipoProduto VARCHAR(30) NOT NULL,
 	preço FLOAT NOT NULL,
-	dataFabricação 
+	dataFabricação VARCHAR(10) NOT NULL,
+	dataValidade VARCHAR(10) NOT NULL,
+	lote INTEGER NOT NULL,
+	
+	PRIMARY KEY(idProduto)
 
+);
 
-
-)
+CREATE TABLE Estoque (
+	idEstoque INTEGER NOT NULL,
+	quantidade INTEGER ,
+	localização VARCHAR(30) NOT NULL,
+	
+);
