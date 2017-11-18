@@ -56,7 +56,7 @@ CREATE TABLE Fornecedor (
 CREATE TABLE Produto (
 	idProduto INTEGER NOT NULL,
 	nomeProduto VARCHAR(45) NOT NULL,
-	tipoProduto VARCHAR(30) NOT NULL CHECK(tipoProduto='TarjaVermelha' or tipoProduto='TarjaPreta' or tipoProduto='TarjaAmarela')
+	tipoProduto VARCHAR(30) NOT NULL,
 	preco FLOAT NOT NULL,
 	dataFabricacao DATE NOT NULL,
 	dataValidade DATE NOT NULL,
@@ -117,7 +117,7 @@ CREATE TABLE Pedido(
 
 CREATE TABLE Venda(
 	idVenda INTEGER NOT NULL,
-	idFuncinario INTEGER NOT NULL REFERENCES Funcionario,
+	idFuncionario INTEGER NOT NULL REFERENCES Funcionario,
     idPedido INTEGER NOT NULL REFERENCES Pedido,
 	dataVenda DATE NOT NULL,
 	formaPagamento VARCHAR(10) NOT NULL CHECK (formaPagamento = 'Dinheiro' or formaPagamento = 'Cartão'), 
@@ -127,10 +127,10 @@ CREATE TABLE Venda(
 );
 
 CREATE TABLE Devolucao (
-	idDevelocao INTEGER NOT NULL,
+	idDevolucao INTEGER NOT NULL,
 	idVenda INTEGER NOT NULL REFERENCES Venda,
 	idProduto INTEGER NOT NULL REFERENCES Produto,
-	motivo VARCHAR(40) NOT NULL,
+	motivo VARCHAR(140) NOT NULL,
 
 	PRIMARY KEY(idDevelocao)
 );
