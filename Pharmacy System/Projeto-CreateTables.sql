@@ -5,6 +5,15 @@ CREATE TABLE Telefones(
     PRIMARY KEY (idTelefone)
 );
 
+CREATE TABLE Login (
+	idLogin INTEGER NOT NULL,
+	nomeLogin VARCHAR(20) NOT NULL UNIQUE,
+	senha VARCHAR(30) NOT NULL,
+
+	PRIMARY KEY(idLogin)
+
+);
+
 CREATE TABLE Cliente (
 
 	idCliente INTEGER NOT NULL,
@@ -18,22 +27,15 @@ CREATE TABLE Cliente (
 	PRIMARY KEY(idCliente)
 );
 
-CREATE TABLE Login (
-	idLogin INTEGER NOT NULL,
-	nomeLogin VARCHAR(20) NOT NULL UNIQUE,
-	senha VARCHAR(30) NOT NULL,
-
-	PRIMARY KEY(idLogin)
-
-);
 
 CREATE TABLE Funcionario (
 
 	idFuncionario INTEGER NOT NULL,
+	idTelefone INTEGER NOT NULL REFERENCES Telefones,
+	idLogin INTEGER NOT NULL REFERENCES Login,
 	nomeFuncionario VARCHAR(45) NOT NULL,
 	cpf VARCHAR(20) NOT NULL UNIQUE,
 	cargo VARCHAR(30) NOT NULL CHECK (cargo = 'Farmacêutico' or cargo = 'Balconista'), --- Mais coisas
-	idTelefone INTEGER NOT NULL REFERENCES Telefones,
 	endereco VARCHAR(45) NOT NULL,
 	sexo VARCHAR(10) NOT NULL CHECK(sexo = 'M' or sexo = 'F' or sexo = 'Outro'),
 	dataNascimento DATE NOT NULL,
