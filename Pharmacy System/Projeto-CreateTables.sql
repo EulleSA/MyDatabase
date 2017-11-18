@@ -10,7 +10,7 @@ CREATE TABLE Cliente (
 	idCliente INTEGER NOT NULL,
     idTelefone INTEGER NOT NULL REFERENCES Telefones,
 	nomeCliente VARCHAR(45) NOT NULL,
-	cpf INTEGER NOT NULL UNIQUE,
+	cpf VARCHAR(20) NOT NULL UNIQUE,
 	endereco VARCHAR(45) NOT NULL,
 	sexo VARCHAR(10) NOT NULL CHECK(sexo = 'M' or sexo = 'F' or sexo = 'Outro'),
 	dataNascimento DATE NOT NULL,
@@ -27,12 +27,11 @@ CREATE TABLE Login (
 
 );
 
-
 CREATE TABLE Funcionario (
 
 	idFuncionario INTEGER NOT NULL,
 	nomeFuncionario VARCHAR(45) NOT NULL,
-	cpf INTEGER NOT NULL UNIQUE,
+	cpf VARCHAR(20) NOT NULL UNIQUE,
 	cargo VARCHAR(30) NOT NULL CHECK (cargo = 'Farmacêutico' or cargo = 'Balconista'), --- Mais coisas
 	idTelefone INTEGER NOT NULL REFERENCES Telefones,
 	endereco VARCHAR(45) NOT NULL,
@@ -41,7 +40,6 @@ CREATE TABLE Funcionario (
 
 	PRIMARY KEY(idFuncionario)
 );
-
 
 CREATE TABLE Fornecedor (
 
@@ -52,8 +50,6 @@ CREATE TABLE Fornecedor (
 
 	PRIMARY KEY(idFornecedor)	
 );
-
-
 
 CREATE TABLE Produto (
 	idProduto INTEGER NOT NULL,
