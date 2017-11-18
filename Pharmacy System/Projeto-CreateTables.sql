@@ -56,7 +56,7 @@ CREATE TABLE Fornecedor (
 CREATE TABLE Produto (
 	idProduto INTEGER NOT NULL,
 	nomeProduto VARCHAR(45) NOT NULL,
-	tipoProduto VARCHAR(30) NOT NULL,
+	tipoProduto VARCHAR(30) NOT NULL CHECK(tipoProduto='TarjaVermelha' or tipoProduto='TarjaPreta' or tipoProduto='TarjaAmarela')
 	preco FLOAT NOT NULL,
 	dataFabricacao DATE NOT NULL,
 	dataValidade DATE NOT NULL,
