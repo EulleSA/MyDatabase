@@ -173,17 +173,6 @@ FOR EACH ROW EXECUTE
 PROCEDURE pagamento_gatilho();
 
 
-INSERT INTO Venda 
-VALUES(11,3,4,'22/10/2017','Cheque',300)
-
-
-	-- Trigger que impede que o medicamento com tarja preta ou vermelha seja vendida sem o receituário --
-
-CREATE FUNCTION venda_medicamento() RETURNS trigger AS $venda_medicamento$
-BEGIN
-	IF NEW.
-
-
 -- Trigger que impede que um produto seja inserido com validade inferior a 6 meses --
 
 CREATE FUNCTION verificaValidade() RETURNS trigger AS $verificaValidade$
@@ -199,6 +188,8 @@ CREATE TRIGGER verificaAno BEFORE INSERT
 ON produto
 FOR EACH ROW EXECUTE
 PROCEDURE verificaValidade();
+
+
 
 -- Criação das Transações -- 
 
@@ -235,7 +226,6 @@ COMMIT;
 -- Fim das transações --
 
 
-
 -- Criação de Views
 
 --Quanto foi vendido pelas diferetes formas de pagamento
@@ -258,4 +248,3 @@ select distinct nomefuncionario
 from venda right join funcionario
 on venda.idfuncionario = funcionario.idfuncionario
 where valortotal is null
-
