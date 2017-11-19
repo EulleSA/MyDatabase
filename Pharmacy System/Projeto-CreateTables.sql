@@ -1,4 +1,3 @@
-
 -- Tabelas --
 
 CREATE TABLE Telefones(
@@ -183,3 +182,20 @@ VALUES(11,3,4,'22/10/2017','Cheque',300)
 CREATE FUNCTION venda_medicamento() RETURNS trigger AS $venda_medicamento$
 BEGIN
 	IF NEW.
+
+
+-- Trigger que impede que um produto seja inserido com validade inferior a 6 meses --
+
+CREATE FUNCTION verificaValidade() RETURNS trigger AS $verificaValidade$
+BEGIN
+	IF age(NEW.datavalidade, current_date) < '6 mons' THEN
+    	RAISE EXCEPTION 'Data validade com menos de 6 meses para vencer!';
+    END IF;
+    RETURN NEW;
+END;
+$verificaValidade$ LANGUAGE plpgsql;
+
+CREATE TRIGGER verificaAno BEFORE INSERT 
+ON produto
+FOR EACH ROW EXECUTE
+PROCEDURE verificaValidade();
