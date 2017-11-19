@@ -1,3 +1,6 @@
+
+-- Tabelas --
+
 CREATE TABLE Telefones(
 	idTelefone INTEGER NOT NULL,
     numero VARCHAR(10) NOT NULL,
@@ -23,6 +26,7 @@ CREATE TABLE Cliente (
 	endereco VARCHAR(45) NOT NULL,
 	sexo VARCHAR(10) NOT NULL CHECK(sexo = 'M' or sexo = 'F' or sexo = 'Outro'),
 	dataNascimento DATE NOT NULL,
+	idLogin INTEGER NOT NULL REFERENCES Login,
 
 	PRIMARY KEY(idCliente)
 );
@@ -132,7 +136,7 @@ CREATE TABLE Devolucao (
 	idProduto INTEGER NOT NULL REFERENCES Produto,
 	motivo VARCHAR(140) NOT NULL,
 
-	PRIMARY KEY(idDevelocao)
+	PRIMARY KEY(idDevolucao)
 );
 
 
@@ -149,3 +153,33 @@ CREATE TABLE ReceitaRemedio(
 
 	PRIMARY KEY(idReceita, idRemedio)
 );
+
+-- Fim da criação das tabelas ---
+
+
+-- Criação das triggers --
+	-- Trigger que impede que o pagamento seja diferente das formas de pagamento impostas --
+CREATE FUNCTION pagamento_gatilho() RETURNS trigger AS $pagamento_gatilho$
+BEGIN 
+	IF NEW.formaPagamento != 'Dinheiro' or NEW.formaPagamento != 'Cartão' THEN
+		RAISE EXCEPTION 'O pagamento só pode ser feito por meio de dinheiro(especie) ou cartão'
+	END IF;
+RETURN NEW;
+END;
+$pagamento_gatilho$ LANGUAGE plpgsql;
+
+CREATE TRIGGER pagamento_inserts BEFORE INSERT OR UPDATE 
+on Venda
+FOR EACH ROW EXECUTE
+PROCEDURE pagamento_gatilho();
+
+
+INSERT INTO Venda 
+VALUES(11,3,4,'22/10/2017','Cheque',300)
+
+
+	-- Trigger que impede que o medicamento com tarja preta ou vermelha seja vendida sem o receituário --
+
+CREATE FUNCTION venda_medicamento() RETURNS trigger AS $venda_medicamento$
+BEGIN
+	IF NEW.
