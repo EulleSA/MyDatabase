@@ -28,27 +28,14 @@ where pedido.quantidade > 0
 --Relatorio de venda
 
 --Quanto foi vendido pelas diferetes formas de pagamento
-create view forma_pagamento_vw as
-select formapagamento, sum(valortotal)
-from venda
-group by formapagamento
 
 select * from forma_pagamento_vw 
 
 --Venda realizada por cada funcionario
-create view venda_por_func_vw as
-select nomefuncionario, sum(venda.valortotal)
-from venda inner join funcionario
-on venda.idfuncionario = funcionario.idfuncionario
-group by funcionario.nomefuncionario
-order by sum(venda.valortotal)
+
+select * from venda_por_func_vw
 
 --Funcionarios que não realizaram venda
-create view func_sem_venda_vw as
-select distinct nomefuncionario
-from venda right join funcionario
-on venda.idfuncionario = funcionario.idfuncionario
-where valortotal is null
 
 select * from func_sem_venda_vw
 
