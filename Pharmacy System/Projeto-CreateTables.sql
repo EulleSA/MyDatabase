@@ -173,17 +173,6 @@ FOR EACH ROW EXECUTE
 PROCEDURE pagamento_gatilho();
 
 
-INSERT INTO Venda 
-VALUES(11,3,4,'22/10/2017','Cheque',300)
-
-
-	-- Trigger que impede que o medicamento com tarja preta ou vermelha seja vendida sem o receituário --
-
-CREATE FUNCTION venda_medicamento() RETURNS trigger AS $venda_medicamento$
-BEGIN
-	IF NEW.
-
-
 -- Trigger que impede que um produto seja inserido com validade inferior a 6 meses --
 
 CREATE FUNCTION verificaValidade() RETURNS trigger AS $verificaValidade$
@@ -199,3 +188,39 @@ CREATE TRIGGER verificaAno BEFORE INSERT
 ON produto
 FOR EACH ROW EXECUTE
 PROCEDURE verificaValidade();
+
+
+
+-- Criação das Transações -- 
+
+	-- Transação 1 --
+
+BEGIN
+UPDATE Produto SET tipoProduto = 'TarjaVermelha' WHERE idProduto = 8;
+SAVEPOINT SAVEPOINT_1;
+UPDATE Produto SET tipoProduto = 'TarjaVermelha' WHERE idProduto = 1;
+SELECT * FROM Produto WHERE idProduto = 8;
+ROLLBACK SAVEPOINT_1;
+SELECT * FROM Produto WHERE idProduto = 8;
+COMMIT
+
+
+
+-- Transação 2 - Concorrente --
+	-- Transação A --
+BEGIN;
+INSERT INTO Medico(crm,nomeMedico)
+VALUES ('134343','Tucaco');
+SELECT * FROM Medico;
+COMMIT
+
+
+
+	-- Transação B --
+
+BEGIN 
+SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
+SELECT * FROM Produto WHERE crm = '134343';
+COMMIT;
+
+-- Fim das transações --
