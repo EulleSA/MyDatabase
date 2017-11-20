@@ -190,7 +190,26 @@ FOR EACH ROW EXECUTE
 PROCEDURE verificaValidade();
 
 
+-- Trigger que impede que um produto de tarja preta ou vermelha seja vendido sem a receita -- 
 
+CREATE FUNCTION verifica_medicamento() RETURNS trigger AS $verifica_medicamento$
+BEGIN 
+	IF tipoProduto = 'Tarja Preta' or 'Tarja Vermelha' THEN
+		IF idReceita = NULL THEN
+			RAISE EXCEPTION 'Você não pode fazer o pedido de um medicamento Tarja preta ou Vermelha sem a receita'
+		END IF;
+	RETURN NEW;
+	END IF;
+END;
+$verifica_medicamento$ LANGUAGE plpgsql;
+
+CREATE TRIGGER verifica_medicamento BEFORE INSERT
+on Pedido
+FOR EACH ROW EXECUTE
+PROCEDURE verifica_medicamento();
+
+
+ 
 -- Criação das Transações -- 
 
 	-- Transação 1 --
