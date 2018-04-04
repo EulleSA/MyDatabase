@@ -1,35 +1,29 @@
  	package br.imd.modelo;
 
-public class Fornecedor extends Pessoa {
+public class Fornecedor {
 	
-	private double valorCredito;
-	private double valorDivida;
+	private String nomeForncedor;
+	private String cnpj;
 	
-	Fornecedor(String nome,String endereco ,String telefone,String sexo,int anoNascimento,double valorCredito, double valorDivida){
-		super(nome,endereco,telefone,sexo,anoNascimento);
-		this.valorCredito = valorCredito;
-		this.valorDivida = valorDivida;
-		
-	}
-	
-	public double obterSaldo() {
-		return this.valorCredito - this.valorDivida;
+	public Fornecedor(String nomeFornecedor,String cnpj) {
+		this.nomeForncedor = nomeForncedor;
+		this.cnpj = cnpj;
 	}
 
-	public double getValorCredito() {
-		return valorCredito;
+	public String getNomeForncedor() {
+		return nomeForncedor;
 	}
 
-	public void setValorCredito(double valorCredito) {
-		this.valorCredito = valorCredito;
+	public void setNomeForncedor(String nomeForncedor) {
+		this.nomeForncedor = nomeForncedor;
 	}
 
-	public double getValorDivida() {
-		return valorDivida;
+	public String getCnpj() {
+		return cnpj;
 	}
 
-	public void setValorDivida(double valorDivida) {
-		this.valorDivida = valorDivida;
+	public void setCnpj(String cnpj) {
+		this.cnpj = cnpj;
 	}
 	
 	

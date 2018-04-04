@@ -6,6 +6,9 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import br.imd.modelo.Funcionario;
+
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JRadioButton;
@@ -105,21 +108,29 @@ public class TelaPrincipal extends JFrame {
 		sexo.setBounds(10, 169, 46, 14);
 		contentPane.add(sexo);
 		
-		JRadioButton rdbtnNewRadioButton = new JRadioButton("M");
-		rdbtnNewRadioButton.setBounds(20, 190, 46, 23);
-		contentPane.add(rdbtnNewRadioButton);
+		JRadioButton rdMasculino = new JRadioButton("M");
+		rdMasculino.setBounds(20, 190, 46, 23);
+		contentPane.add(rdMasculino);
 		
-		JRadioButton rdbtnNewRadioButton_1 = new JRadioButton("F");
-		rdbtnNewRadioButton_1.setBounds(72, 190, 46, 23);
-		contentPane.add(rdbtnNewRadioButton_1);
+		JRadioButton rdFeminino = new JRadioButton("F");
+		rdFeminino.setBounds(72, 190, 46, 23);
+		contentPane.add(rdFeminino);
 		
-		JRadioButton rdbtnOutro = new JRadioButton("Outro");
-		rdbtnOutro.setBounds(120, 190, 53, 23);
-		contentPane.add(rdbtnOutro);
+		JRadioButton rdOutro = new JRadioButton("Outro");
+		rdOutro.setBounds(120, 190, 53, 23);
+		contentPane.add(rdOutro);
 		
 		JButton btnCadastrar = new JButton("Cadastrar");
 		btnCadastrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+
+				String nome = txtnome.getText();
+				String endereco = txtendereco.getText();
+				String telefone = txttelefone.getText();
+				String cpf = txtcpf.getText();
+				String anoNascimento = txtdataNascimento.getText();
+				
+				Funcionario newFunc = new Funcionario(nome,endereco,telefone,cpf,anoNascimento);
 				
 			}
 		});
@@ -143,7 +154,7 @@ public class TelaPrincipal extends JFrame {
 		JMenu menuItem1 = new JMenu("Cadastrar");
 		menuBar.add(menuItem1);
 		
-		JMenuItem mntmCliente = new JMenuItem("Cliente");
+		JMenuItem mntmCliente = new JMenuItem("Produto");
 		menuItem1.add(mntmCliente);
 		
 		JMenuItem mntmFuncionario = new JMenuItem("Funcionario");

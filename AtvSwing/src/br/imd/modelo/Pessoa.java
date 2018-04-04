@@ -5,22 +5,15 @@ public class Pessoa {
 	protected String endereco;
 	protected String telefone;
 	protected String sexo;
-	protected int anoNascimento ;
+	protected String anoNascimento ;
 	
 	
-	Pessoa(String nome, String endereco, String telefone, String sexo, int anoNascimento) {
+	Pessoa(String nome, String endereco, String telefone, String sexo, String anoNascimento) {
 		this.nome = nome;
 		this.endereco = endereco;
 		this.telefone = telefone;
 		this.sexo = sexo;
 		this.anoNascimento = anoNascimento;
-	}
-	
-	public int calcularIdade(int ano) {
-		int idade;
-		idade = ano - this.anoNascimento;
-		return idade;
-		
 	}
 
 	public String getNome() {
@@ -55,11 +48,11 @@ public class Pessoa {
 		this.sexo = sexo;
 	}
 
-	public int getAnoNascimento() {
+	public String getAnoNascimento() {
 		return anoNascimento;
 	}
 
-	public void setAnoNascimento(int anoNascimento) {
+	public void setAnoNascimento(String anoNascimento) {
 		this.anoNascimento = anoNascimento;
 	}
 	
