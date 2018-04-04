@@ -85,11 +85,11 @@ public class TelaPrincipal extends JFrame {
 		
 		JLabel lblDataNascimento = new JLabel("Data Nascimento :");
 		lblDataNascimento.setFont(new Font("Open Sans", Font.PLAIN, 12));
-		lblDataNascimento.setBounds(10, 89, 108, 14);
+		lblDataNascimento.setBounds(10, 89, 128, 14);
 		contentPane.add(lblDataNascimento);
 		
 		txtdataNascimento = new JTextField();
-		txtdataNascimento.setBounds(121, 87, 101, 20);
+		txtdataNascimento.setBounds(140, 87, 101, 20);
 		contentPane.add(txtdataNascimento);
 		txtdataNascimento.setColumns(10);
 		
@@ -116,9 +116,15 @@ public class TelaPrincipal extends JFrame {
 		rdFeminino.setBounds(72, 190, 46, 23);
 		contentPane.add(rdFeminino);
 		
+<<<<<<< HEAD
 		JRadioButton rdOutro = new JRadioButton("Outro");
 		rdOutro.setBounds(120, 190, 53, 23);
 		contentPane.add(rdOutro);
+=======
+		JRadioButton rdbtnOutro = new JRadioButton("Outro");
+		rdbtnOutro.setBounds(122, 190, 78, 23);
+		contentPane.add(rdbtnOutro);
+>>>>>>> cde7d7585d882405f7cc69ecfa8953645f1a4207
 		
 		JButton btnCadastrar = new JButton("Cadastrar");
 		btnCadastrar.addActionListener(new ActionListener() {
@@ -139,11 +145,11 @@ public class TelaPrincipal extends JFrame {
 		
 		JLabel lblEndereo = new JLabel("Endere\u00E7o :");
 		lblEndereo.setFont(new Font("Open Sans", Font.PLAIN, 12));
-		lblEndereo.setBounds(10, 114, 69, 14);
+		lblEndereo.setBounds(10, 114, 108, 14);
 		contentPane.add(lblEndereo);
 		
 		txtendereco = new JTextField();
-		txtendereco.setBounds(74, 112, 239, 20);
+		txtendereco.setBounds(86, 115, 185, 20);
 		contentPane.add(txtendereco);
 		txtendereco.setColumns(10);
 		
@@ -158,25 +164,18 @@ public class TelaPrincipal extends JFrame {
 		menuItem1.add(mntmCliente);
 		
 		JMenuItem mntmFuncionario = new JMenuItem("Funcionario");
-		mntmFuncionario.addContainerListener(new ContainerAdapter() {
-			@Override
-			public void componentAdded(ContainerEvent arg0) {
-			
-				setAutoRequestFocus(false);
-				setTitle("Cadastro Funcionario");
-				setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-				setBounds(100, 100, 455, 312);
-				contentPane = new JPanel();
-				contentPane.setToolTipText("");
-				contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-				setContentPane(contentPane);
-				contentPane.setLayout(null);
-			}
-			
-		});
 		menuItem1.add(mntmFuncionario);
 		
 		JMenuItem mntmFornecedor = new JMenuItem("Fornecedor");
 		menuItem1.add(mntmFornecedor);
+		
+		JMenu mnNewMenu = new JMenu("Produto");
+		menuBar.add(mnNewMenu);
+		
+		JMenuItem mntmCadastrar = new JMenuItem("Cadastrar");
+		mnNewMenu.add(mntmCadastrar);
+		
+		JMenuItem mntmEstoque = new JMenuItem("Estoque");
+		mnNewMenu.add(mntmEstoque);
 	}
 }
