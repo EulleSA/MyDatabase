@@ -2,14 +2,16 @@ package br.imd.modelo;
 
 public class Pessoa {
 	protected String nome;
+	protected String cpf;
 	protected String endereco;
 	protected String telefone;
 	protected String sexo;
 	protected String anoNascimento ;
 	
 	
-	Pessoa(String nome, String endereco, String telefone, String sexo, String anoNascimento) {
+	Pessoa(String nome,String cpf ,String endereco, String telefone, String sexo, String anoNascimento) {
 		this.nome = nome;
+		this.cpf = cpf;
 		this.endereco = endereco;
 		this.telefone = telefone;
 		this.sexo = sexo;
@@ -22,6 +24,14 @@ public class Pessoa {
 
 	public void setNome(String nome) {
 		this.nome = nome;
+	}
+	
+	public String getCpf(){
+		return cpf;
+	}
+	
+	public void setCpf(String cpf){
+		this.cpf = cpf;
 	}
 
 	public String getEndereco() {

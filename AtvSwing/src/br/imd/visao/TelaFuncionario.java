@@ -24,7 +24,7 @@ import javax.swing.JMenuItem;
 import java.awt.event.ContainerAdapter;
 import java.awt.event.ContainerEvent;
 
-public class TelaPrincipal extends JFrame {
+public class TelaFuncionario extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField txtnome;
@@ -40,7 +40,7 @@ public class TelaPrincipal extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					TelaPrincipal frame = new TelaPrincipal();
+					TelaFuncionario frame = new TelaFuncionario();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -52,9 +52,9 @@ public class TelaPrincipal extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public TelaPrincipal() {
+	public TelaFuncionario() {
 		setAutoRequestFocus(false);
-		setTitle("Cadastro Pessoa");
+		setTitle("Cadastro Funcionario");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 455, 312);
 		contentPane = new JPanel();
@@ -108,35 +108,41 @@ public class TelaPrincipal extends JFrame {
 		sexo.setBounds(10, 169, 46, 14);
 		contentPane.add(sexo);
 		
-		JRadioButton rdMasculino = new JRadioButton("M");
-		rdMasculino.setBounds(20, 190, 46, 23);
+		JRadioButton rdMasculino = new JRadioButton("Masculino");
+		rdMasculino.setBounds(20, 190, 105, 23);
 		contentPane.add(rdMasculino);
 		
-		JRadioButton rdFeminino = new JRadioButton("F");
-		rdFeminino.setBounds(72, 190, 46, 23);
+		JRadioButton rdFeminino = new JRadioButton("Feminino");
+		rdFeminino.setBounds(129, 190, 112, 23);
 		contentPane.add(rdFeminino);
 		
-<<<<<<< HEAD
 		JRadioButton rdOutro = new JRadioButton("Outro");
-		rdOutro.setBounds(120, 190, 53, 23);
+		rdOutro.setBounds(256, 190, 72, 23);
 		contentPane.add(rdOutro);
-=======
-		JRadioButton rdbtnOutro = new JRadioButton("Outro");
-		rdbtnOutro.setBounds(122, 190, 78, 23);
-		contentPane.add(rdbtnOutro);
->>>>>>> cde7d7585d882405f7cc69ecfa8953645f1a4207
+		
+		
 		
 		JButton btnCadastrar = new JButton("Cadastrar");
 		btnCadastrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 
 				String nome = txtnome.getText();
+				String sexo = null;
 				String endereco = txtendereco.getText();
 				String telefone = txttelefone.getText();
 				String cpf = txtcpf.getText();
 				String anoNascimento = txtdataNascimento.getText();
+				if(rdMasculino.getText() == "Masculino"){
+					sexo = rdMasculino.getText();
+				}
+				else if(rdFeminino.getText() == "Feminino"){
+					sexo = rdFeminino.getText();
+				}
+				else if(rdOutro.getText() == "Outro"){
+					sexo = rdOutro.getText();
+				}
 				
-				Funcionario newFunc = new Funcionario(nome,endereco,telefone,cpf,anoNascimento);
+				Funcionario newFunc = new Funcionario(nome,cpf,endereco,telefone,sexo,anoNascimento);
 				
 			}
 		});
@@ -157,25 +163,13 @@ public class TelaPrincipal extends JFrame {
 		menuBar.setBounds(0, 0, 439, 21);
 		contentPane.add(menuBar);
 		
-		JMenu menuItem1 = new JMenu("Cadastrar");
+		JMenu menuItem1 = new JMenu("Opções");
 		menuBar.add(menuItem1);
 		
-		JMenuItem mntmCliente = new JMenuItem("Produto");
+		JMenuItem mntmCliente = new JMenuItem("Cadastrar");
 		menuItem1.add(mntmCliente);
 		
-		JMenuItem mntmFuncionario = new JMenuItem("Funcionario");
+		JMenuItem mntmFuncionario = new JMenuItem("Listar");
 		menuItem1.add(mntmFuncionario);
-		
-		JMenuItem mntmFornecedor = new JMenuItem("Fornecedor");
-		menuItem1.add(mntmFornecedor);
-		
-		JMenu mnNewMenu = new JMenu("Produto");
-		menuBar.add(mnNewMenu);
-		
-		JMenuItem mntmCadastrar = new JMenuItem("Cadastrar");
-		mnNewMenu.add(mntmCadastrar);
-		
-		JMenuItem mntmEstoque = new JMenuItem("Estoque");
-		mnNewMenu.add(mntmEstoque);
 	}
 }

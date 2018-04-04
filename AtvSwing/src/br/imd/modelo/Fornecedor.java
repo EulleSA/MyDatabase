@@ -1,4 +1,4 @@
- 	package br.imd.modelo;
+ package br.imd.modelo;
 
 public class Fornecedor {
 	
