@@ -7,6 +7,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import br.imd.controle.Fachada;
 import br.imd.modelo.Funcionario;
 
 import javax.swing.JLabel;
@@ -32,27 +33,13 @@ public class TelaFuncionario extends JFrame {
 	private JTextField txtdataNascimento;
 	private JTextField txttelefone;
 	private JTextField txtendereco;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					TelaFuncionario frame = new TelaFuncionario();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+	Fachada fachada;
 
 	/**
 	 * Create the frame.
 	 */
-	public TelaFuncionario() {
+	public TelaFuncionario(Fachada fachada) {
+		this.fachada = fachada;
 		setAutoRequestFocus(false);
 		setTitle("Cadastro Funcionario");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

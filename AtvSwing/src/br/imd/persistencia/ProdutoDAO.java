@@ -1,4 +1,4 @@
-package br.imd.controle;
+package br.imd.persistencia;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;

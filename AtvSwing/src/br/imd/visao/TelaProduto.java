@@ -7,6 +7,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import br.imd.controle.Fachada;
 import br.imd.modelo.Funcionario;
 import br.imd.modelo.Produto;
 
@@ -28,27 +29,14 @@ public class TelaProduto extends JFrame {
 	private JTextField txtQuantidade;
 	private JTextField txtDatavalidade;
 	private JTextField txtDatafabricacao;
+	Fachada fachada;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					TelaProduto frame = new TelaProduto();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	/**
 	 * Create the frame.
 	 */
-	public TelaProduto() {
+	public TelaProduto(Fachada fachada) {
+		this.fachada = fachada;
 		setTitle("Cadastro Produto");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
@@ -133,6 +121,7 @@ public class TelaProduto extends JFrame {
 				
 				
 				Produto newProduto = new Produto(nome,tipo,preco,quantidade,dataValidade,dataFabricacao);
+				fachada.cadastrarProduto(newProduto);
 			}
 		});
 		btnCadastrar.setBounds(161, 235, 117, 25);
