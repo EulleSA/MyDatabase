@@ -1,4 +1,4 @@
-package br.imd.controle;
+package br.imd.persistencia;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,8 +10,8 @@ public class FuncionarioDAO {
 	private Connection conn;
 	
 /* Criar a conex�o */
-	public FuncionarioDAO() throws SQLException {
-		
+	public FuncionarioDAO(Connection conn) throws SQLException {
+		this.conn = conn;
 	}	
 	
 	
@@ -29,6 +29,7 @@ public class FuncionarioDAO {
 		
 		pst.execute();
 		conn.commit();
+		
 		pst.close();
 		System.out.println("Funcionario " + funcionario.getNome() + " cadastrado.");
 		
