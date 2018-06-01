@@ -1,5 +1,6 @@
 from tkinter import *
-from pony.orm import *
+from .AddWindow import *
+#from pony.orm import *
 
 #https://www.pycursos.com/tkinter-sqlite3/
 '''
@@ -15,10 +16,25 @@ class Funcionario:
 '''
 
 
-db = Database()
+#db = Database()
+
+class MainWindow:
+    def __init__(self, master):
+        self.master = master
+        master.title("Pharmacy System")
+        self.master["bg"] = "pink"
+
+        bt1 = Button(self.master, width=20, text="Funcionario",command=self.add_funcionario)
+        bt1.place(x=100,y=100)
+
+        self.master.geometry("350x350+100+100")
 
 
+    def add_funcionario(self):
+       Add_Funcionario_Window()
 
+
+'''
 # Acesso ao banco
 class Funcionario(db.Entity):
     nome = Required(str)
@@ -26,6 +42,10 @@ class Funcionario(db.Entity):
     sexo = Required(str)
     anoNascimento = Required(str)
 
+
+    @db_session
+    def add(self):
+        Funcionario(nome=self.ed_name.get(),cpf=int(self.ed_cpf.get()),sexo=self.ed_sexo.get(),anoNascimento=self.ed_anoNascimento.get())
 
 
 # Parte gráfica
@@ -66,9 +86,7 @@ def cadastro_funcionario():
 
     janela.mainloop()
 
-@db_session
-def add(self):
-    Funcionario(nome=self.ed_name.get(),cpf=int(self.ed_cpf.get()),sexo=self.ed_sexo.get(),anoNascimento=self.ed_anoNascimento.get())
+
 
 db.bind(provider='sqlite', filename='database.sqlite', create_db=True)
 db.generate_mapping(create_tables=True)
@@ -77,10 +95,6 @@ db.generate_mapping(create_tables=True)
 janela = Tk()
 janela.title("Pharmacy System")
 
-janela["bg"] = "pink"
 
-bt1 = Button(janela, width=20, text="Funcionario",command=cadastro_funcionario)
-bt1.place(x=100,y=100)
-
-janela.geometry("350x350+100+100")
 janela.mainloop()
+'''
