@@ -1,7 +1,7 @@
+
+from .MainWindow import *
 from sys import path
 path.append("..")
-from .MainWindow import *
-
 
 class Add_Funcionario_Window:
     def __init__(self):
@@ -22,7 +22,7 @@ class Add_Funcionario_Window:
         self.ed_sexo = Entry(self.janela,)
         self.ed_anoNascimento = Entry(self.janela,)
 
-        self.btn1 = Button(self.janela, text="Confirmar")
+        self.btn1 = Button(self.janela, text="Confirmar", command=self.add)
         self.btn2 = Button(self.janela, text="Cancelar")
 
         #LAYOUT
@@ -36,14 +36,15 @@ class Add_Funcionario_Window:
         self.ed_sexo.grid(row=2,column=1)
         self.ed_anoNascimento.grid(row=3,column=1)
 
-        self.btn1.grid(row=6,column=1,sticky=W,command=self.add)
-        self.btn2.grid(row=6,column=1,sticky=E,command=self.cancelar)
+        self.btn1.grid(row=6,column=1,sticky=W)
+        self.btn2.grid(row=6,column=1,sticky=E)
 
         self.janela.mainloop()
 
-    with db_session:
-        def add(self):
-            Funcionario(nome=self.ed_name.get(),cpf=int(self.ed_cpf.get()),sexo=self.ed_sexo.get(),anoNascimento=self.ed_anoNascimento.get())
-            
-    def cancelar(self):
-        self.janela.destroy()
+    def add(self):
+        nome = self.ed_name.get()
+        cpf = self.ed_cpf.get()
+        sexo = self.ed_sexo.get()
+        anoNascimento = self.ed_anoNascimento.get()
+        from Control.Sessions import Funcionario_ORM
+        Funcionario_ORM.add_funcionario(nome,cpf,sexo,anoNascimento)
