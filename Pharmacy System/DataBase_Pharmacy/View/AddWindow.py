@@ -43,8 +43,9 @@ class Add_Funcionario_Window:
 
     def add(self):
         nome = self.ed_name.get()
-        cpf = self.ed_cpf.get()
+        cpf =  self.ed_cpf.get()
         sexo = self.ed_sexo.get()
         anoNascimento = self.ed_anoNascimento.get()
         from Control.Sessions import Funcionario_ORM
         Funcionario_ORM.add_funcionario(nome,cpf,sexo,anoNascimento)
+    
