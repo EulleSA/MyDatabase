@@ -28,7 +28,6 @@ class MainWindow:
         bt1 = Button(self.master, width=20, text="Funcionario",command=self.tela_funcionario)
         bt1.place(x=100,y=100)
 
-
         bt2 = Button(self.master, width=20, text="Fornecedor",command=self.tela_fornecedor)
         bt2.place(x=100,y=150)
 
