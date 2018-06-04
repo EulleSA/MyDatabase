@@ -9,7 +9,6 @@ class Funcionario(db.Entity):
     sexo = Required(str)
     anoNascimento = Required(str)
 
-
 class Produto(db.Entity):
     nome = Required(str)
     preco = Required(float)
