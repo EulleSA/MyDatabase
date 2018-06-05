@@ -4,7 +4,7 @@ from sys import path
 path.append("..")
 import tkinter.ttk as ttk
 from Control.Sessions import *
-
+from Model.Models import *
 
 class Funcionario_Window:
     def __init__(self):
@@ -46,6 +46,8 @@ class Funcionario_Window:
         Button(self.janela,text='Deletar').grid(row=7,column=0)
         Button(self.janela,text='Editar').grid(row=7,column=1)
 
+        Funcionario_ORM.get_fuc_all(self.tree)
+
         self.janela.mainloop()
 
 
@@ -56,6 +58,7 @@ class Funcionario_Window:
         anoNascimento = self.anoNascimento.get()
         
         Funcionario_ORM.add_funcionario(nome,cpf,sexo,anoNascimento)
+
 
 
 
