@@ -34,8 +34,8 @@ class Funcionario_Window:
         self.anoNascimento.grid(row=4,column=2)
         
         Button(frame,text='Adicionar',command=self.add_func).grid(row=5,column=2)
-        self.message = Label(text='')
-        self.message.grid(row=5,column=0)
+        self.message = Label(self.janela,text='',font=('arial',8),fg='red')
+        self.message.grid(row=5,column=1)
         
         
         self.tree = ttk.Treeview(self.janela,height=10,column=2)
@@ -43,23 +43,32 @@ class Funcionario_Window:
         self.tree.heading('#0',text='Nome',anchor=W)
         self.tree.heading(2,text='CPF',anchor=W)
 
-        Button(self.janela,text='Deletar').grid(row=7,column=0)
+        Button(self.janela,text='Deletar',command=self.delete_func).grid(row=7,column=0)
         Button(self.janela,text='Editar').grid(row=7,column=1)
 
         Funcionario_ORM.get_fuc_all(self.tree)
 
         self.janela.mainloop()
 
-
     def add_func(self):
         nome = self.name.get()
         cpf =  self.cpf.get()
         sexo = self.sexo.get()
         anoNascimento = self.anoNascimento.get()
-        
-        Funcionario_ORM.add_funcionario(nome,cpf,sexo,anoNascimento)
+        if(len(self.name.get()) != 0 and len(self.cpf.get()) != 0 and len(self.sexo.get()) != 0 and len(self.anoNascimento.get())!=0):
+            Funcionario_ORM.add_funcionario(nome,cpf,sexo,anoNascimento)
+            self.message['text'] = 'PRODUTO {} ADICIONADO COM SUCESSO '.format(self.name.get())
+            self.name.delete(0,END)
+            self.cpf.delete(0,END)
+            self.sexo.delete(0,END)
+            self.anoNascimento.delete(0,END)
+            Funcionario_ORM.get_fuc_all(self.tree)
+        else:
+            self.message['text'] = 'POR FAVOR, INSIRA VALORES NOS CAMPOS FALTANTES!'
+            
 
-
+    def delete_func(self):
+        Funcionario_ORM.delete_one_func(self.tree)
 
 
 class Fornecedor_Window:
@@ -94,6 +103,8 @@ class Fornecedor_Window:
         Button(self.janela2,text='Deletar').grid(row=5,column=0)
         Button(self.janela2,text='Editar').grid(row=5,column=1)
 
+        Fornecedor_ORM.get_forn_all(self.tree)
+
         self.janela2.mainloop()
 
 
@@ -102,7 +113,8 @@ class Fornecedor_Window:
         cnpj = self.cnpj.get()
         Fornecedor_ORM.add_fornecedor(nome,cnpj)
 
-
+    def delete_forn(self):
+        Fornecedor_ORM.delete_one_forn(self.tree)
 
 class Produto_Window:
     def __init__(self):
@@ -141,6 +153,9 @@ class Produto_Window:
         Button(self.janela3,text='Deletar').grid(row=6,column=0)
         Button(self.janela3,text='Editar').grid(row=6,column=1)
 
+
+        get_prod_all(self.tree)
+
         self.janela3.mainloop()
 
 
@@ -152,8 +167,8 @@ class Produto_Window:
 
 
 
-
-
+    def delete_prod(self):
+        Fornecedor_ORM.delete_one_prod(self.tree)
 
 
 
