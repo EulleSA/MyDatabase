@@ -22,11 +22,18 @@ class Funcionario_ORM:
         curItem = tree.focus()
         contents = (tree.item(curItem))
         selecteditem = contents['text']
-        print(selecteditem)
         tree.delete(curItem)
         row = Model.Models.Funcionario.select_by_sql('SELECT * FROM Funcionario WHERE id=%s' % selecteditem)
         row[0].delete()
 
+    @db_session
+    def edit_func(tree,get_name,nome):
+        curItem = tree.focus()
+        contents = (tree.item(curItem))
+        selecteditem = contents['text']
+        row = Model.Models.Funcionario.select_by_sql('SELECT * FROM Funcionario WHERE id=%s' % selecteditem)
+        funcionario = row
+        
 
 class Fornecedor_ORM:
     @db_session
@@ -41,7 +48,7 @@ class Fornecedor_ORM:
             tree.delete(elements)
         db_rows = Model.Models.Fornecedor.select_by_sql('SELECT * FROM Fornecedor')
         for row in db_rows:
-            tree.insert('',0,text=row.nome,values=row.cnpj)
+            tree.insert('','end',text=row.id,values=(row.nome,row.cnpj))
 
 
     @db_session
@@ -50,9 +57,8 @@ class Fornecedor_ORM:
         contents = (tree.item(curItem))
         selecteditem = contents['text']
         tree.delete(curItem)
-        row = Model.Models.Fornecedor.select_by_sql('SELECT * FROM Fornecedor WHERE nome=%s' % selecteditem)
+        row = Model.Models.Fornecedor.select_by_sql('SELECT * FROM Fornecedor WHERE id=%s' % selecteditem)
         row[0].delete()
-
 
 class Produto_ORM:
     @db_session
@@ -67,7 +73,7 @@ class Produto_ORM:
             tree.delete(elements)
         db_rows = Model.Models.Produto.select_by_sql('SELECT * FROM Produto')
         for row in db_rows:
-            tree.insert('',0,text=row.nome,values=row.preco)
+            tree.insert('','end',text=row.id,values=(row.nome,row.preco))
     
     @db_session
     def delete_one_prod(tree):
@@ -75,5 +81,5 @@ class Produto_ORM:
         contents = (tree.item(curItem))
         selecteditem = contents['text']
         tree.delete(curItem)
-        row = Model.Models.Produto.select_by_sql('SELECT * FROM Produto WHERE nome=%s' % selecteditem)
+        row = Model.Models.Produto.select_by_sql('SELECT * FROM Produto WHERE id=%s' % selecteditem)
         row[0].delete()

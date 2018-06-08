@@ -58,7 +58,7 @@ class Funcionario_Window:
         anoNascimento = self.anoNascimento.get()
         if(len(self.name.get()) != 0 and len(self.cpf.get()) != 0 and len(self.sexo.get()) != 0 and len(self.anoNascimento.get())!=0):
             Funcionario_ORM.add_funcionario(nome,cpf,sexo,anoNascimento)
-            self.message['text'] = 'PRODUTO {} ADICIONADO COM SUCESSO '.format(self.name.get())
+            self.message['text'] = 'Funcionario {} ADICIONADO COM SUCESSO '.format(self.name.get())
             self.name.delete(0,END)
             self.cpf.delete(0,END)
             self.sexo.delete(0,END)
@@ -70,21 +70,24 @@ class Funcionario_Window:
 
     def delete_func(self):
         Funcionario_ORM.delete_one_func(self.tree)
+        self.message['text'] = 'FUNCIONARIO DELETADO COM SUCESSO ! '
 
-
-    #def edit_func(self):
-
-
-
-
+    def edit_func(self):
+        if(self.name.get() != 0):
+            Funcionario_ORM.edit_func(self.tree,self.name.get(),Model.Models.Funcionario.nome)
+        elif(self.cpf.get() != 0):
+            Model.Models.Funcionario.cpf = self.cpf.get()
+        elif(self.sexo.get() != 0):
+            Model.Models.Funcionario.sexo = self.sexo.get()
+        elif(self.anoNascimento.get() != 0):
+            Model.Models.Funcionario.anoNascimento = self.anoNascimento.get()
         
 class Fornecedor_Window:
     def __init__(self):
         self.janela2 = Tk()
-        self.janela2.geometry("420x400+100+100")
+        self.janela2.geometry("650x400+100+100")
         self.janela2["bg"] = "pink"
         self.janela2.title("Fornecedor")
-
 
         frame2 = LabelFrame(self.janela2,text='Adicionar Novo')
         frame2.grid(row=0,column=1)
@@ -98,14 +101,14 @@ class Fornecedor_Window:
         self.cnpj.grid(row=2,column=2)
 
         Button(frame2,text='Adicionar',command=self.add_forn).grid(row=3,column=2)
-        self.message = Label(text='')
-        self.message.grid(row=3,column=0)
+        self.message = Label(self.janela2,text='',font=('arial',8),fg='red')
+        self.message.grid(row=3,column=1)
         
-        
-        self.tree = ttk.Treeview(self.janela2,height=10,column=2)
-        self.tree.grid(row=4,column=0,columnspan=2)
-        self.tree.heading('#0',text='Nome',anchor=W)
-        self.tree.heading(2,text='CNPJ',anchor=W)
+        self.tree = ttk.Treeview(self.janela2,height=10,columns=('Id','Nome'))
+        self.tree.grid(row=4,column=0,columnspan=3)
+        self.tree.heading('#0',text='Id',anchor=W)
+        self.tree.heading('#1',text='Nome',anchor=W)
+        self.tree.heading('#2',text='CNPJ',anchor=W)
 
         Button(self.janela2,text='Deletar',command=self.delete_forn).grid(row=5,column=0)
         Button(self.janela2,text='Editar').grid(row=5,column=1)
@@ -118,16 +121,24 @@ class Fornecedor_Window:
     def add_forn(self):
         nome = self.name2.get()
         cnpj = self.cnpj.get()
-        Fornecedor_ORM.add_fornecedor(nome,cnpj)
+        if(len(self.name2.get()) != 0 and len(self.cnpj.get()) != 0):
+            Fornecedor_ORM.add_fornecedor(nome,cnpj)
+            self.message['text'] = 'FORNECEDOR {} ADICIONADO COM SUCESSO '.format(self.name2.get())
+            self.name2.delete(0,END)
+            self.cnpj.delete(0,END)
+            
+            Fornecedor_ORM.get_forn_all(self.tree)
+        else:
+            self.message['text'] = 'POR FAVOR, INSIRA VALORES NOS CAMPOS FALTANTES!'
 
     def delete_forn(self):
         Fornecedor_ORM.delete_one_forn(self.tree)
-
+        self.message['text'] = 'FORNECEDOR DELETADO COM SUCESSO ! '
 
 class Produto_Window:
     def __init__(self):
         self.janela3 = Tk()
-        self.janela3.geometry("420x400+100+100")
+        self.janela3.geometry("650x400+100+100")
         self.janela3["bg"] = "pink"
         self.janela3.title("Produto")
 
@@ -149,15 +160,15 @@ class Produto_Window:
 
 
         Button(frame3,text='Adicionar',command=self.add_prod).grid(row=4,column=2)
-        self.message = Label(text='')
+        self.message = Label(self.janela3,text='',font=('arial',8),fg='red')
         self.message.grid(row=4,column=0)
         
         
-        self.tree = ttk.Treeview(self.janela3,height=10,column=2)
-        self.tree.grid(row=5,column=0,columnspan=2)
-        self.tree.heading('#0',text='Nome',anchor=W)
-        self.tree.heading(2,text='CNPJ',anchor=W)
-
+        self.tree = ttk.Treeview(self.janela3,height=10,columns=('Id','Nome'))
+        self.tree.grid(row=5,column=0,columnspan=3)
+        self.tree.heading('#0',text='Id',anchor=W)
+        self.tree.heading('#1',text='Nome',anchor=W)
+        self.tree.heading('#2',text='Preco',anchor=W)
         Button(self.janela3,text='Deletar',command=self.delete_prod).grid(row=6,column=0)
         Button(self.janela3,text='Editar').grid(row=6,column=1)
 
@@ -168,48 +179,25 @@ class Produto_Window:
 
 
     def add_prod(self):
+        
         nome = self.name3.get()
         preco = self.price.get()
         quantidade = self.quant.get()
-        Produto_ORM.add_produto(nome,preco,quantidade)
+        if(len(self.name3.get()) != 0 and len(self.price.get()) != 0 and len(self.quant.get()) != 0 ):
+            Produto_ORM.add_produto(nome,preco,quantidade)
+            self.message['text'] = 'PRODUTO {} ADICIONADO COM SUCESSO '.format(nome)
+            self.name3.delete(0,END)
+            self.price.delete(0,END)
+            self.quant.delete(0,END)
 
-
+            Produto_ORM.get_prod_all(self.tree)
+        else:
+            self.message['text'] = 'POR FAVOR, INSIRA VALORES NOS CAMPOS FALTANTES!'
 
     def delete_prod(self):
         Produto_ORM.delete_one_prod(self.tree)
+        self.message['text'] = 'PRODUTO DELETADO COM SUCESSO ! '
 
-
-
-        #WIDGETS
-'''
-        self.lb1 = Label(self.janela,text="Nome",bg="white")
-        self.lb2 = Label(self.janela,text="CPF",bg="white")
-        self.lb3 = Label(self.janela,text="Sexo",bg="white")
-        self.lb4 = Label(self.janela,text="Ano de Nascimento",bg="white")
-
-        self.ed_name = Entry(self.janela,)
-        self.ed_cpf = Entry(self.janela,)
-        self.ed_sexo = Entry(self.janela,)
-        self.ed_anoNascimento = Entry(self.janela,)
-
-        self.btn1 = Button(self.janela, text="Confirmar", command=self.add)
-        self.btn2 = Button(self.janela, text="Cancelar", command=self.exit_add)
-
-        #LAYOUT
-        self.lb1.grid(row=0,column=0)
-        self.lb2.grid(row=1,column=0)
-        self.lb3.grid(row=2,column=0)
-        self.lb4.grid(row=3,column=0)
-
-        self.ed_name.grid(row=0,column=1)
-        self.ed_cpf.grid(row=1,column=1)
-        self.ed_sexo.grid(row=2,column=1)
-        self.ed_anoNascimento.grid(row=3,column=1)
-
-        self.btn1.grid(row=6,column=1,sticky=W)
-        self.btn2.grid(row=6,column=1,sticky=E)
-'''
-        
 
    
     
