@@ -15,19 +15,19 @@ class Funcionario_ORM:
             tree.delete(elements)
         db_rows = Model.Models.Funcionario.select_by_sql('SELECT * FROM Funcionario')
         for row in db_rows:
-            tree.insert('',0,text=row.nome,values=row.cpf)
+            tree.insert('','end',text=row.id,values=(row.nome,row.cpf))
 
     @db_session
     def delete_one_func(tree):
         curItem = tree.focus()
         contents = (tree.item(curItem))
         selecteditem = contents['text']
+        print(selecteditem)
         tree.delete(curItem)
-        row = Model.Models.Funcionario.select_by_sql('SELECT * FROM Funcionario WHERE nome=%s' % selecteditem)
+        row = Model.Models.Funcionario.select_by_sql('SELECT * FROM Funcionario WHERE id=%s' % selecteditem)
         row[0].delete()
 
 
-    
 class Fornecedor_ORM:
     @db_session
     def add_fornecedor(nome,cnpj):

@@ -9,7 +9,7 @@ from Model.Models import *
 class Funcionario_Window:
     def __init__(self):
         self.janela = Tk()
-        self.janela.geometry("420x400+100+100")
+        self.janela.geometry("650x450+100+100")
         self.janela["bg"] = "pink"
         self.janela.title("Funcionário")
 
@@ -38,10 +38,11 @@ class Funcionario_Window:
         self.message.grid(row=5,column=1)
         
         
-        self.tree = ttk.Treeview(self.janela,height=10,column=2)
-        self.tree.grid(row=6,column=0,columnspan=2)
-        self.tree.heading('#0',text='Nome',anchor=W)
-        self.tree.heading(2,text='CPF',anchor=W)
+        self.tree = ttk.Treeview(self.janela,height=10,columns=('Id','Nome'))
+        self.tree.grid(row=6,column=0,columnspan=3)
+        self.tree.heading('#0',text='Id',anchor=W)
+        self.tree.heading('#1',text='Nome',anchor=W)
+        self.tree.heading('#2',text='CPF',anchor=W)
 
         Button(self.janela,text='Deletar',command=self.delete_func).grid(row=7,column=0)
         Button(self.janela,text='Editar').grid(row=7,column=1)
@@ -71,6 +72,12 @@ class Funcionario_Window:
         Funcionario_ORM.delete_one_func(self.tree)
 
 
+    #def edit_func(self):
+
+
+
+
+        
 class Fornecedor_Window:
     def __init__(self):
         self.janela2 = Tk()
@@ -100,7 +107,7 @@ class Fornecedor_Window:
         self.tree.heading('#0',text='Nome',anchor=W)
         self.tree.heading(2,text='CNPJ',anchor=W)
 
-        Button(self.janela2,text='Deletar').grid(row=5,column=0)
+        Button(self.janela2,text='Deletar',command=self.delete_forn).grid(row=5,column=0)
         Button(self.janela2,text='Editar').grid(row=5,column=1)
 
         Fornecedor_ORM.get_forn_all(self.tree)
@@ -115,6 +122,7 @@ class Fornecedor_Window:
 
     def delete_forn(self):
         Fornecedor_ORM.delete_one_forn(self.tree)
+
 
 class Produto_Window:
     def __init__(self):
@@ -150,11 +158,11 @@ class Produto_Window:
         self.tree.heading('#0',text='Nome',anchor=W)
         self.tree.heading(2,text='CNPJ',anchor=W)
 
-        Button(self.janela3,text='Deletar').grid(row=6,column=0)
+        Button(self.janela3,text='Deletar',command=self.delete_prod).grid(row=6,column=0)
         Button(self.janela3,text='Editar').grid(row=6,column=1)
 
 
-        get_prod_all(self.tree)
+        Produto_ORM.get_prod_all(self.tree)
 
         self.janela3.mainloop()
 
@@ -168,7 +176,7 @@ class Produto_Window:
 
 
     def delete_prod(self):
-        Fornecedor_ORM.delete_one_prod(self.tree)
+        Produto_ORM.delete_one_prod(self.tree)
 
 
 
