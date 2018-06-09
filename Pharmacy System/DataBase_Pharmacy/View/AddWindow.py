@@ -45,7 +45,7 @@ class Funcionario_Window:
         self.tree.heading('#2',text='CPF',anchor=W)
 
         Button(self.janela,text='Deletar',command=self.delete_func).grid(row=7,column=0)
-        Button(self.janela,text='Editar').grid(row=7,column=1)
+        Button(self.janela,text='Editar',command=self.edit_func).grid(row=7,column=1)
 
         Funcionario_ORM.get_fuc_all(self.tree)
 
@@ -73,15 +73,17 @@ class Funcionario_Window:
         self.message['text'] = 'FUNCIONARIO DELETADO COM SUCESSO ! '
 
     def edit_func(self):
-        if(self.name.get() != 0):
-            Funcionario_ORM.edit_func(self.tree,self.name.get(),Model.Models.Funcionario.nome)
-        elif(self.cpf.get() != 0):
-            Model.Models.Funcionario.cpf = self.cpf.get()
-        elif(self.sexo.get() != 0):
-            Model.Models.Funcionario.sexo = self.sexo.get()
-        elif(self.anoNascimento.get() != 0):
-            Model.Models.Funcionario.anoNascimento = self.anoNascimento.get()
-        
+        if(len(self.name.get()) != 0):
+            Funcionario_ORM.edit_func_nome(self.tree,self.name.get())
+        if(len(self.cpf.get()) != 0):
+            Funcionario_ORM.edit_func_cpf(self.tree,self.cpf.get())
+        if(len(self.sexo.get()) != 0):
+            Funcionario_ORM.edit_func_sexo(self.tree,self.sexo.get())
+        if(len(self.anoNascimento.get()) != 0):
+            Funcionario_ORM.edit_func_anoNascimento(self.tree,self.anoNascimento.get())
+        Funcionario_ORM.get_fuc_all(self.tree)
+
+
 class Fornecedor_Window:
     def __init__(self):
         self.janela2 = Tk()
@@ -111,7 +113,7 @@ class Fornecedor_Window:
         self.tree.heading('#2',text='CNPJ',anchor=W)
 
         Button(self.janela2,text='Deletar',command=self.delete_forn).grid(row=5,column=0)
-        Button(self.janela2,text='Editar').grid(row=5,column=1)
+        Button(self.janela2,text='Editar',command=self.edit_forn).grid(row=5,column=1)
 
         Fornecedor_ORM.get_forn_all(self.tree)
 
@@ -134,6 +136,15 @@ class Fornecedor_Window:
     def delete_forn(self):
         Fornecedor_ORM.delete_one_forn(self.tree)
         self.message['text'] = 'FORNECEDOR DELETADO COM SUCESSO ! '
+    
+    def edit_forn(self):
+        if(len(self.name2.get()) != 0):
+            Fornecedor_ORM.edit_forn_nome(self.tree,self.name2.get())
+        if(len(self.cnpj.get()) != 0):
+            Fornecedor_ORM.edit_forn_cnpj(self.tree,self.cnpj.get())
+        
+        Fornecedor_ORM.get_forn_all(self.tree)
+
 
 class Produto_Window:
     def __init__(self):
@@ -170,13 +181,12 @@ class Produto_Window:
         self.tree.heading('#1',text='Nome',anchor=W)
         self.tree.heading('#2',text='Preco',anchor=W)
         Button(self.janela3,text='Deletar',command=self.delete_prod).grid(row=6,column=0)
-        Button(self.janela3,text='Editar').grid(row=6,column=1)
+        Button(self.janela3,text='Editar',command=self.edit_prod).grid(row=6,column=1)
 
 
         Produto_ORM.get_prod_all(self.tree)
 
         self.janela3.mainloop()
-
 
     def add_prod(self):
         
@@ -196,8 +206,13 @@ class Produto_Window:
 
     def delete_prod(self):
         Produto_ORM.delete_one_prod(self.tree)
-        self.message['text'] = 'PRODUTO DELETADO COM SUCESSO ! '
+        self.message['text'] = 'PRODUTO DELETADO COM SUCESSO !'
 
-
-   
-    
+    def edit_prod(self):
+        if(len(self.name3.get()) != 0):
+            Produto_ORM.edit_prod_nome(self.tree,self.name3.get())
+        if(len(self.price.get()) != 0):
+            Produto_ORM.edit_prod_price(self.tree,self.price.get())
+        if(len(self.quant.get()) != 0):
+            Produto_ORM.edit_prod_quant(self.tree,self.quant.get())
+        Produto_ORM.get_prod_all(self.tree)
