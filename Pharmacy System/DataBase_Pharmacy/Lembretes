@@ -1,4 +1,11 @@
 Fazer o CRUD de edição . -  FEITO
+
 Colocar as validações nas outras entidades ( Forncedor , Produto) - FEITO
-Criar uma relação entre as entidades "Fornecedor" e "Produto"
+
+Criar uma relação entre as entidades "Fornecedor" e "Produto" - FEITO
+
 Cache de dados 
+
+Adicionar os atributos "Data de Validade"(Date.now() - Date.now - 3) e "Data de Fabricação"(Data de Validade - Date.now()
+
+Crio um campo Fornecedor no frame de cadastro do Produto e na hora de adicionar o Produto eu faço uma busca pelo fornecedor que tem aquele determinado nome, eu capturo o objeto dele e armazeno na variável que se refere ao atributo funcionario

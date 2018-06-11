@@ -4,7 +4,7 @@ from pony.orm import *
 class Funcionario_ORM:
     #CRUD - INSERTION
     @db_session
-    def add_funcionario(nome,cpf,sexo,anoNascimento):
+    def add_funcionario(nome,cpf,sexo,anoNascimento): 
         Model.Models.Funcionario(nome=nome, cpf=cpf, sexo=sexo, anoNascimento=anoNascimento)
     
     #CRUD - READ
@@ -83,6 +83,7 @@ class Fornecedor_ORM:
         tree.delete(curItem)
         row = Model.Models.Fornecedor.select_by_sql('SELECT * FROM Fornecedor WHERE id=%s' % selecteditem)
         row[0].delete()
+
     #CRUD - EDIT
     @db_session
     def edit_forn_nome(tree,get_name):
@@ -106,9 +107,11 @@ class Produto_ORM:
     
     #CRUD - INSERTION
     @db_session
-    def add_produto(nome,preco,quantidade):
-        Model.Models.Produto(nome=nome,preco=preco,quantidade=quantidade)
-    
+    def add_produto(nome,preco,quantidade,forn,func):
+        forn_prod = select(f for f in Model.Models.Fornecedor if f.nome==forn)[:]
+        func_prod = select(fu for fu in Model.Models.Funcionario if fu.nome==func)[:]
+        Model.Models.Produto(nome=nome,preco=preco,quantidade=quantidade,fornecedor=forn_prod[0],funcionario=func_prod[0])
+
     #CRUD - READ
     @db_session
     def get_prod_all(tree):
@@ -118,6 +121,7 @@ class Produto_ORM:
         db_rows = Model.Models.Produto.select_by_sql('SELECT * FROM Produto')
         for row in db_rows:
             tree.insert('','end',text=row.id,values=(row.nome,row.preco))
+
     #CRUD - DELETE
     @db_session
     def delete_one_prod(tree):

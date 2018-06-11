@@ -149,7 +149,7 @@ class Fornecedor_Window:
 class Produto_Window:
     def __init__(self):
         self.janela3 = Tk()
-        self.janela3.geometry("650x400+100+100")
+        self.janela3.geometry("650x500+100+100")
         self.janela3["bg"] = "pink"
         self.janela3.title("Produto")
 
@@ -169,19 +169,25 @@ class Produto_Window:
         self.quant = Entry(frame3)
         self.quant.grid(row=3,column=2)
 
+        Label(frame3,text='Fornecedor').grid(row=4,column=1)        
+        self.forn = Entry(frame3)
+        self.forn.grid(row=4,column=2)
 
-        Button(frame3,text='Adicionar',command=self.add_prod).grid(row=4,column=2)
+        Label(frame3,text='Funcionario').grid(row=5,column=1)
+        self.func = Entry(frame3)
+        self.func.grid(row=5,column=2) 
+
+        Button(frame3,text='Adicionar',command=self.add_prod).grid(row=6,column=2)
         self.message = Label(self.janela3,text='',font=('arial',8),fg='red')
-        self.message.grid(row=4,column=0)
-        
+        self.message.grid(row=6,column=0)
         
         self.tree = ttk.Treeview(self.janela3,height=10,columns=('Id','Nome'))
-        self.tree.grid(row=5,column=0,columnspan=3)
+        self.tree.grid(row=7,column=0,columnspan=3)
         self.tree.heading('#0',text='Id',anchor=W)
         self.tree.heading('#1',text='Nome',anchor=W)
         self.tree.heading('#2',text='Preco',anchor=W)
-        Button(self.janela3,text='Deletar',command=self.delete_prod).grid(row=6,column=0)
-        Button(self.janela3,text='Editar',command=self.edit_prod).grid(row=6,column=1)
+        Button(self.janela3,text='Deletar',command=self.delete_prod).grid(row=8,column=0)
+        Button(self.janela3,text='Editar',command=self.edit_prod).grid(row=8,column=1)
 
 
         Produto_ORM.get_prod_all(self.tree)
@@ -189,17 +195,19 @@ class Produto_Window:
         self.janela3.mainloop()
 
     def add_prod(self):
-        
         nome = self.name3.get()
         preco = self.price.get()
         quantidade = self.quant.get()
+        fornecedor = self.forn.get()
+        funcionario = self.func.get()
         if(len(self.name3.get()) != 0 and len(self.price.get()) != 0 and len(self.quant.get()) != 0 ):
-            Produto_ORM.add_produto(nome,preco,quantidade)
+            Produto_ORM.add_produto(nome,preco,quantidade,fornecedor,funcionario)
             self.message['text'] = 'PRODUTO {} ADICIONADO COM SUCESSO '.format(nome)
             self.name3.delete(0,END)
             self.price.delete(0,END)
             self.quant.delete(0,END)
-
+            self.forn.delete(0,END)
+            self.func.delete(0,END)
             Produto_ORM.get_prod_all(self.tree)
         else:
             self.message['text'] = 'POR FAVOR, INSIRA VALORES NOS CAMPOS FALTANTES!'
