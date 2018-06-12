@@ -9,3 +9,5 @@ Cache de dados
 Adicionar os atributos "Data de Validade"(Date.now() - Date.now - 3) e "Data de Fabricação"(Data de Validade - Date.now()
 
 Crio um campo Fornecedor no frame de cadastro do Produto e na hora de adicionar o Produto eu faço uma busca pelo fornecedor que tem aquele determinado nome, eu capturo o objeto dele e armazeno na variável que se refere ao atributo funcionario
+
+Criar uma validação para só poder cadastrar o produto e fornecedor se existir algum funcionário cadastrado

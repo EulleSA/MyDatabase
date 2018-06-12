@@ -74,6 +74,11 @@ class Fornecedor_ORM:
         for row in db_rows:
             tree.insert('','end',text=row.id,values=(row.nome,row.cnpj))
 
+    @db_session
+    def verifica_banco():
+        valor = Model.Models.Funcionario.select_by_sql('SELECT * FROM Funcionario')
+        return valor
+
     #CRUD - DELETE
     @db_session
     def delete_one_forn(tree):
@@ -121,6 +126,12 @@ class Produto_ORM:
         db_rows = Model.Models.Produto.select_by_sql('SELECT * FROM Produto')
         for row in db_rows:
             tree.insert('','end',text=row.id,values=(row.nome,row.preco))
+
+
+    @db_session
+    def verifica_banco():
+        valor = Model.Models.Funcionario.select_by_sql('SELECT * FROM Funcionario')
+        return valor
 
     #CRUD - DELETE
     @db_session
