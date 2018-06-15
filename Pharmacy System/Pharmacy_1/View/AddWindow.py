@@ -3,8 +3,8 @@ from .MainWindow import *
 from sys import path
 path.append("..")
 import tkinter.ttk as ttk
-from Control.Sessions import *
-from Model.Models import *
+#from Control.Sessions import *
+#from Model.Models import *
 
 class Funcionario_Window:
     def __init__(self):
@@ -47,7 +47,7 @@ class Funcionario_Window:
         Button(self.janela,text='Deletar',command=self.delete_func).grid(row=7,column=0)
         Button(self.janela,text='Editar',command=self.edit_func).grid(row=7,column=1)
 
-        Funcionario_ORM.get_fuc_all(self.tree)
+        
 
         self.janela.mainloop()
 
@@ -57,31 +57,31 @@ class Funcionario_Window:
         sexo = self.sexo.get()
         anoNascimento = self.anoNascimento.get()
         if(len(self.name.get()) != 0 and len(self.cpf.get()) != 0 and len(self.sexo.get()) != 0 and len(self.anoNascimento.get())!=0):
-            Funcionario_ORM.add_funcionario(nome,cpf,sexo,anoNascimento)
+            
             self.message['text'] = 'Funcionario {} ADICIONADO COM SUCESSO '.format(self.name.get())
             self.name.delete(0,END)
             self.cpf.delete(0,END)
             self.sexo.delete(0,END)
             self.anoNascimento.delete(0,END)
-            Funcionario_ORM.get_fuc_all(self.tree)
+            
         else:
             self.message['text'] = 'POR FAVOR, INSIRA VALORES NOS CAMPOS FALTANTES!'
             
 
     def delete_func(self):
-        Funcionario_ORM.delete_one_func(self.tree)
+        
         self.message['text'] = 'FUNCIONARIO DELETADO COM SUCESSO ! '
 
-    def edit_func(self):
-        if(len(self.name.get()) != 0):
-            Funcionario_ORM.edit_func_nome(self.tree,self.name.get())
-        if(len(self.cpf.get()) != 0):
-            Funcionario_ORM.edit_func_cpf(self.tree,self.cpf.get())
-        if(len(self.sexo.get()) != 0):
-            Funcionario_ORM.edit_func_sexo(self.tree,self.sexo.get())
-        if(len(self.anoNascimento.get()) != 0):
-            Funcionario_ORM.edit_func_anoNascimento(self.tree,self.anoNascimento.get())
-        Funcionario_ORM.get_fuc_all(self.tree)
+    #def edit_func(self):
+        #if(len(self.name.get()) != 0):
+            
+        #if(len(self.cpf.get()) != 0):
+            
+        #if(len(self.sexo.get()) != 0):
+            
+        #if(len(self.anoNascimento.get()) != 0):
+            
+        
 
 
 class Fornecedor_Window:
@@ -115,7 +115,7 @@ class Fornecedor_Window:
         Button(self.janela2,text='Deletar',command=self.delete_forn).grid(row=5,column=0)
         Button(self.janela2,text='Editar',command=self.edit_forn).grid(row=5,column=1)
 
-        Fornecedor_ORM.get_forn_all(self.tree)
+        
 
         self.janela2.mainloop()
 
@@ -124,26 +124,26 @@ class Fornecedor_Window:
         nome = self.name2.get()
         cnpj = self.cnpj.get()
         if(len(self.name2.get()) != 0 and len(self.cnpj.get()) != 0):
-            Fornecedor_ORM.add_fornecedor(nome,cnpj)
+            
             self.message['text'] = 'FORNECEDOR {} ADICIONADO COM SUCESSO '.format(self.name2.get())
             self.name2.delete(0,END)
             self.cnpj.delete(0,END)
             
-            Fornecedor_ORM.get_forn_all(self.tree)
+            
         else:
             self.message['text'] = 'POR FAVOR, INSIRA VALORES NOS CAMPOS FALTANTES!'
 
     def delete_forn(self):
-        Fornecedor_ORM.delete_one_forn(self.tree)
+       
         self.message['text'] = 'FORNECEDOR DELETADO COM SUCESSO ! '
-    
+'''    
     def edit_forn(self):
         if(len(self.name2.get()) != 0):
             Fornecedor_ORM.edit_forn_nome(self.tree,self.name2.get())
         if(len(self.cnpj.get()) != 0):
             Fornecedor_ORM.edit_forn_cnpj(self.tree,self.cnpj.get())
+'''        
         
-        Fornecedor_ORM.get_forn_all(self.tree)
 
 
 class Produto_Window:
@@ -189,9 +189,6 @@ class Produto_Window:
         Button(self.janela3,text='Deletar',command=self.delete_prod).grid(row=8,column=0)
         Button(self.janela3,text='Editar',command=self.edit_prod).grid(row=8,column=1)
 
-
-        Produto_ORM.get_prod_all(self.tree)
-
         self.janela3.mainloop()
 
     def add_prod(self):
@@ -201,26 +198,24 @@ class Produto_Window:
         fornecedor = self.forn.get()
         funcionario = self.func.get()
         if(len(self.name3.get()) != 0 and len(self.price.get()) != 0 and len(self.quant.get()) != 0 ):
-            Produto_ORM.add_produto(nome,preco,quantidade,fornecedor,funcionario)
             self.message['text'] = 'PRODUTO {} ADICIONADO COM SUCESSO '.format(nome)
             self.name3.delete(0,END)
             self.price.delete(0,END)
             self.quant.delete(0,END)
             self.forn.delete(0,END)
             self.func.delete(0,END)
-            Produto_ORM.get_prod_all(self.tree)
+            
         else:
             self.message['text'] = 'POR FAVOR, INSIRA VALORES NOS CAMPOS FALTANTES!'
 
     def delete_prod(self):
-        Produto_ORM.delete_one_prod(self.tree)
+        
         self.message['text'] = 'PRODUTO DELETADO COM SUCESSO !'
-
+'''
     def edit_prod(self):
         if(len(self.name3.get()) != 0):
-            Produto_ORM.edit_prod_nome(self.tree,self.name3.get())
+            
         if(len(self.price.get()) != 0):
-            Produto_ORM.edit_prod_price(self.tree,self.price.get())
+           
         if(len(self.quant.get()) != 0):
-            Produto_ORM.edit_prod_quant(self.tree,self.quant.get())
-        Produto_ORM.get_prod_all(self.tree)
+   '''     
