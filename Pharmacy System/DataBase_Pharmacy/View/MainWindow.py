@@ -27,8 +27,32 @@ class MainWindow:
         Funcionario_Window()
 
     def tela_fornecedor(self):
-        Fornecedor_Window()
+        #Criar a cache aqui.
+        if(Fornecedor_ORM.verifica_banco() == []):
+            self.janela = Tk()
+            self.janela.title("ERRO")
+            self.msg = Label(self.janela,text="O sistema não possui nenhum funcionário cadastrado!",font=('Calibri',12),fg='black').grid(row=3,column=2) 
+            self.janela["bg"] = "pink"
+                    
+            self.janela.geometry("425x100+200+100")
+
+            self.janela.mainloop()
+            
+        else:
+            Fornecedor_Window()
     
     def tela_produto(self):
-        Produto_Window()
+         #Criar a cache aqui.
+        if(Produto_ORM.verifica_banco() == []):
+            self.janela = Tk()
+            self.janela.title("ERRO")
+            self.msg = Label(self.janela,text="O sistema não possui nenhum funcionário cadastrado!",font=('Calibri',12),fg='black').grid(row=3,column=2) 
+            self.janela["bg"] = "pink"
+                    
+            self.janela.geometry("425x100+200+100")
+
+            self.janela.mainloop()
+            
+        else:
+            Produto_Window()
 
