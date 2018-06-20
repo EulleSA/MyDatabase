@@ -47,7 +47,6 @@ class Funcionario_Window:
         Button(self.janela,text='Deletar',command=self.delete_func).grid(row=7,column=0)
         Button(self.janela,text='Editar',command=self.edit_func).grid(row=7,column=1)
 
-        
 
         self.janela.mainloop()
 
@@ -63,6 +62,8 @@ class Funcionario_Window:
             self.cpf.delete(0,END)
             self.sexo.delete(0,END)
             self.anoNascimento.delete(0,END)
+            
+            func = Funcionario(nome,cpf,sexo,anoNascimento)
             
         else:
             self.message['text'] = 'POR FAVOR, INSIRA VALORES NOS CAMPOS FALTANTES!'
