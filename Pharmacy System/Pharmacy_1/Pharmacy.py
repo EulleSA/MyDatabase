@@ -1,17 +1,16 @@
 
 from View.MainWindow import *
 from pymongo import *
-
+import psycopg2
 if __name__ == "__main__":
-    
-    client = MongoClient('mongodb://localhost:27017/')
-    banco = client.Pharmacy
-    produto = banco.produto
-    funcionario = banco.funcionario
-    fornecedor = banco.fornecedor
+
+    con = psycopg2.connect(host='localhost', database='postgres',user='postgres', password='postgres')
+    con.set_session(autocommit=True)
+    database = con.cursor()
+
 
     root = Tk()
-        
+
     MainWindow(root)
     root.mainloop()
 
