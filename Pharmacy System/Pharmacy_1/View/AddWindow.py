@@ -3,11 +3,16 @@ from .MainWindow import *
 from sys import path
 path.append("..")
 import tkinter.ttk as ttk
+from Dao.PostgresqlDAO import *
+#from Control.Controller import *
 #from Control.Sessions import *
 #from Model.Models import *
 
 class Funcionario_Window:
-    def __init__(self):
+    def __init__(self,dao_factory):
+
+        self.dao_factory = dao_factory
+
         self.janela = Tk()
         self.janela.geometry("650x450+100+100")
         self.janela["bg"] = "pink"
@@ -45,8 +50,9 @@ class Funcionario_Window:
         self.tree.heading('#2',text='CPF',anchor=W)
 
         Button(self.janela,text='Deletar',command=self.delete_func).grid(row=7,column=0)
-        Button(self.janela,text='Editar',command=self.edit_func).grid(row=7,column=1)
+        Button(self.janela,text='Editar', command=self.edit_func).grid(row=7,column=1)
 
+        self.get_func()
 
         self.janela.mainloop()
 
@@ -57,31 +63,92 @@ class Funcionario_Window:
         anoNascimento = self.anoNascimento.get()
         if(len(self.name.get()) != 0 and len(self.cpf.get()) != 0 and len(self.sexo.get()) != 0 and len(self.anoNascimento.get())!=0):
             
+            #Linha 65 deverá ser tratada no arquivo control
+            func = Funcionario(nome,cpf,sexo,anoNascimento)
+            funcDAO = self.dao_factory.get_FuncionarioDAO()
+            funcDAO.insert(func)
+            
             self.message['text'] = 'Funcionario {} ADICIONADO COM SUCESSO '.format(self.name.get())
             self.name.delete(0,END)
             self.cpf.delete(0,END)
             self.sexo.delete(0,END)
             self.anoNascimento.delete(0,END)
+            #FuncionarioDAO.create_table(self.dao_factory)
             
-            func = Funcionario(nome,cpf,sexo,anoNascimento)
+            #Não precisa mudar da linha 78-84     
+            get_func = funcDAO.get_func_all(self.dao_factory)
+            records = self.tree.get_children()
+
+            for elements in records:
+                self.tree.delete(elements)
+            for row in get_func:
+                self.tree.insert('','end',text=row.nome,values=(row.cpf,row.sexo))
             
         else:
             self.message['text'] = 'POR FAVOR, INSIRA VALORES NOS CAMPOS FALTANTES!'
             
 
+    def get_func(self):
+
+        funcDAO = self.dao_factory.get_FuncionarioDAO()
+
+    
+        records = self.tree.get_children()
+        for elements in records:
+            self.tree.delete(elements)
+
+        get_func = funcDAO.get_func_all(self.dao_factory)
+        for row in get_func:
+            self.tree.insert('','end',text=row.nome,values=(row.cpf,row.sexo))
+
     def delete_func(self):
+        curItem = self.tree.focus()
+        contents = (self.tree.item(curItem))
+        selecteditem = contents['text']
         
+        funcDAO = self.dao_factory.get_FuncionarioDAO()
+        funcDAO.delete_one_func(selecteditem)
+        self.tree.delete(curItem)
+
         self.message['text'] = 'FUNCIONARIO DELETADO COM SUCESSO ! '
 
-    #def edit_func(self):
-        #if(len(self.name.get()) != 0):
-            
-        #if(len(self.cpf.get()) != 0):
-            
-        #if(len(self.sexo.get()) != 0):
-            
-        #if(len(self.anoNascimento.get()) != 0):
-            
+
+
+    def edit_func(self):
+
+        funcDAO = self.dao_factory.get_FuncionarioDAO()
+    
+        if(len(self.name.get()) != 0):
+            curItem = self.tree.focus()
+            contents = (self.tree.item(curItem))
+            selecteditem = contents['text']
+            funcDAO.edit_func_nome(self.name.get(), selecteditem)
+            self.get_func()
+            self.message['text'] = 'NOME DO FUNCIONÁRIO ATUALIZADO COM SUCESSO !'
+
+        if(len(self.cpf.get()) != 0):
+            curItem = self.tree.focus()
+            contents = (self.tree.item(curItem))
+            selecteditem = contents['text']
+            funcDAO.edit_func_cpf(self.cpf.get(),selecteditem)
+            self.get_func()
+            self.message['text'] = 'CPF DO FUNCIONÁRIO ATUALIZADO COM SUCESSO !'
+
+        if(len(self.sexo.get()) != 0):
+            curItem = self.tree.focus()
+            contents = (self.tree.item(curItem))
+            selecteditem = contents['text']
+            funcDAO.edit_func_sexo(self.sexo.get(),selecteditem)
+            self.get_func()
+            self.message['text'] = 'SEXO DO FUNCIONÁRIO ATUALIZADO COM SUCESSO !'
+
+        if(len(self.anoNascimento.get()) != 0):
+            curItem = self.tree.focus()
+            contents = (self.tree.item(curItem))
+            selecteditem = contents['text']
+            funcDAO.edit_func_sexo(self.anoNascimento.get(),selecteditem)
+            self.get_func()
+            self.message['text'] = 'ANO DE NASCIMENTO DO FUNCIONÁRIO ATUALIZADO COM SUCESSO !'
         
 
 

@@ -8,7 +8,10 @@ from .AddWindow import *
 #db = Database()
 
 class MainWindow:
-    def __init__(self, master):
+    def __init__(self, master, dao_factory):
+        
+        self.dao_factory = dao_factory
+
         self.master = master
         master.title("Pharmacy System")
         self.master["bg"] = "pink"
@@ -24,7 +27,7 @@ class MainWindow:
         self.master.geometry("350x350+100+100")
 
     def tela_funcionario(self):
-        Funcionario_Window()
+        Funcionario_Window(self.dao_factory)
 
     def tela_fornecedor(self):
         Fornecedor_Window()
