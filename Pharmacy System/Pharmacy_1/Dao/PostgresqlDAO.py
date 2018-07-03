@@ -61,3 +61,115 @@ class FuncionarioDAO:
     def edit_func_anoNascimento(self, anoNascimento , nome):
         sql_string = "UPDATE funcionario SET anoNascimento = %s WHERE nome = %s"
         self.db.execute(sql_string, (anoNascimento, nome)) 
+    
+    def get_from_name(self, name):
+        sql_string = "SELECT * FROM funcionario WHERE nome = %s"
+        self.db.execute(sql_string, (name,))
+
+        try:
+            row = self.db.fetchone()
+            cpf = row[2]
+            sexo = row[3]
+            anoNascimento = row[4]
+
+            funcionario = Funcionario(name, cpf, sexo , anoNascimento)
+            return funcionario
+
+        except ProgrammingError:
+            raise Exception("No author with this name")
+
+class FornecedorDAO:
+    def  __init__(self,db):
+        self.db = db
+
+    def create_table(self):
+        sql_string = self.db.execute("CREATE TABLE Fornecedor ( id SERIAL PRIMARY KEY , nome TEXT NOT NULL , cnpj INTEGER NOT NULL UNIQUE, " +
+                                    "funcionario_id INTEGER REFERENCES Funcionario (id) ON UPDATE CASCADE ON DELETE CASCADE)")
+
+    def detele_table(self):
+        self.db.execute("DROP TABLE IF EXISTS Fornecedor")
+
+    def insert(self,fornecedor):
+
+        sql_string = "SELECT id FROM funcionario WHERE nome = %s"
+        self.db.execute(sql_string, (fornecedor.funcionario.nome,))
+        func_id = self.db.fetchone()[0]
+        
+        sql_string = "INSERT INTO Fornecedor (nome, cnpj, funcionario_id) VALUES (%s, %s, %s)"
+        self.db.execute(sql_string, (fornecedor.nome, fornecedor.cnpj, func_id))  
+
+    
+    def get_forn_all(self,fornecedor):
+        sql_string = "SELECT * FROM fornecedor"
+        self.db.execute(sql_string)
+
+        rows = self.db.fetchall()
+
+        fornecedores = []
+
+        for row in rows:
+            name = row[1]
+            cnpj = row[2]
+            funcionario_id = row[3]
+            
+            fornecedor = Fornecedor(name, cnpj, funcionario_id)
+            fornecedores.append(fornecedor)
+
+        return fornecedores
+
+    def delete_one_forn(self,fornecedor):
+        sql_string = "DELETE FROM fornecedor WHERE nome = %s"
+        self.db.execute(sql_string,(fornecedor,))
+
+    def edit_forn_nome(self, new_name , old_name):
+        sql_string = "UPDATE fornecedor SET nome = %s WHERE nome = %s"
+        self.db.execute(sql_string, (new_name, old_name))
+
+    def edit_forn_cnpj(self,cnpj):
+        sql_string = "UPDATE fornecedor SET cnpj = %s WHERE nome = %s"
+        self.db.execute(sql_string,(cnpj,))
+
+
+    def get_from_name(self, nome):
+        sql_string = "SELECT * FROM fornecedor WHERE nome = %s"
+        self.db.execute(sql_string, (nome,))
+
+        try:
+            row = self.db.fetchone()
+            cnpj = row[2]
+            fornecedor_id = row[3]
+
+            fornecedor = Fornecedor(nome, cnpj,fornecedor_id)
+            return fornecedor
+
+        except ProgrammingError:
+            raise Exception("Nenhum fornecedor com esse nome")
+
+
+class ProdutoDAO:
+    def __init__(self,db):
+        self.db =  db
+
+    def create_table(self):
+        self.db.execute("CREATE TABLE Produto (id SERIAL PRIMARY KEY , nome TEXT NOT NULL , preco FLOAT NOT NULL , quantidade INTEGER NOT NULL, "+ 
+        "fornecedor_id INTEGER REFERENCES fornecedor (id) ON UPDATE CASCADE ON DELETE CASCADE, "+
+        "funcionario_id INTEGER REFERENCES funcionario (id) ON UPDATE CASCADE ON DELETE CASCADE)")
+
+    def detele_table(self):
+        self.db.execute("DROP TABLE IF EXISTS Produto")
+
+    def insert(self,produto):
+        sql_string = "SELECT id FROM fornecedor WHERE nome = %s"
+        self.db.execute(sql_string, (produto.fornecedor.nome,))
+        fornecedor_id = self.db.fetchone()[0]
+
+        sql_string = "SELECT id FROM funcionario WHERE name = %s"
+        self.db.execute(sql_string, (produto.funcionario.nome,))
+        funcionario_id = self.db.fetchone()[0]
+
+        sql_string = "INSERT INTO Produto (nome, preco, quantidade, fornecedor_id, funcionario_id) VALUES (%s, %s, %s, %s, %s)"
+        self.db.execute(sql_string,(produto.nome,produto.preco,produto.fornecedor_id, produto.funcionario_id))
+
+
+
+    

@@ -30,8 +30,8 @@ class MainWindow:
         Funcionario_Window(self.dao_factory)
 
     def tela_fornecedor(self):
-        Fornecedor_Window()
+        Fornecedor_Window(self.dao_factory)
     
     def tela_produto(self):
-        Produto_Window()
+        Produto_Window(self.dao_factory)
 

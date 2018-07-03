@@ -1,4 +1,4 @@
-
+ 
 from .MainWindow import *
 from sys import path
 path.append("..")
@@ -45,14 +45,14 @@ class Funcionario_Window:
         
         self.tree = ttk.Treeview(self.janela,height=10,columns=('Id','Nome'))
         self.tree.grid(row=6,column=0,columnspan=3)
-        self.tree.heading('#0',text='Id',anchor=W)
-        self.tree.heading('#1',text='Nome',anchor=W)
-        self.tree.heading('#2',text='CPF',anchor=W)
+        self.tree.heading('#0',text='Nome',anchor=W)
+        self.tree.heading('#1',text='CPF',anchor=W)
+        self.tree.heading('#2',text='Sexo',anchor=W)
 
         Button(self.janela,text='Deletar',command=self.delete_func).grid(row=7,column=0)
         Button(self.janela,text='Editar', command=self.edit_func).grid(row=7,column=1)
 
-        self.get_func()
+        self.get_funcs()
 
         self.janela.mainloop()
 
@@ -76,23 +76,16 @@ class Funcionario_Window:
             #FuncionarioDAO.create_table(self.dao_factory)
             
             #Não precisa mudar da linha 78-84     
-            get_func = funcDAO.get_func_all(self.dao_factory)
-            records = self.tree.get_children()
-
-            for elements in records:
-                self.tree.delete(elements)
-            for row in get_func:
-                self.tree.insert('','end',text=row.nome,values=(row.cpf,row.sexo))
+            self.get_funcs()
             
         else:
             self.message['text'] = 'POR FAVOR, INSIRA VALORES NOS CAMPOS FALTANTES!'
             
 
-    def get_func(self):
+    def get_funcs(self):
 
         funcDAO = self.dao_factory.get_FuncionarioDAO()
 
-    
         records = self.tree.get_children()
         for elements in records:
             self.tree.delete(elements)
@@ -102,6 +95,7 @@ class Funcionario_Window:
             self.tree.insert('','end',text=row.nome,values=(row.cpf,row.sexo))
 
     def delete_func(self):
+
         curItem = self.tree.focus()
         contents = (self.tree.item(curItem))
         selecteditem = contents['text']
@@ -153,7 +147,10 @@ class Funcionario_Window:
 
 
 class Fornecedor_Window:
-    def __init__(self):
+    def __init__(self,dao_factory):
+
+        self.dao_factory = dao_factory
+
         self.janela2 = Tk()
         self.janela2.geometry("650x400+100+100")
         self.janela2["bg"] = "pink"
@@ -170,52 +167,108 @@ class Fornecedor_Window:
         self.cnpj = Entry(frame2)
         self.cnpj.grid(row=2,column=2)
 
-        Button(frame2,text='Adicionar',command=self.add_forn).grid(row=3,column=2)
+        Label(frame2,text='Funcionario').grid(row=3,column=1)
+        self.func = Entry(frame2)
+        self.func.grid(row=3,column=2)
+
+        Button(frame2,text='Adicionar',command=self.add_forn).grid(row=4,column=2)
         self.message = Label(self.janela2,text='',font=('arial',8),fg='red')
-        self.message.grid(row=3,column=1)
+        self.message.grid(row=4,column=1)
         
         self.tree = ttk.Treeview(self.janela2,height=10,columns=('Id','Nome'))
-        self.tree.grid(row=4,column=0,columnspan=3)
-        self.tree.heading('#0',text='Id',anchor=W)
-        self.tree.heading('#1',text='Nome',anchor=W)
-        self.tree.heading('#2',text='CNPJ',anchor=W)
+        self.tree.grid(row=5,column=0,columnspan=3)
+        self.tree.heading('#0',text='Nome',anchor=W)
+        self.tree.heading('#1',text='CNPJ',anchor=W)
+        #self.tree.heading('#2',text='CNPJ',anchor=W)
 
-        Button(self.janela2,text='Deletar',command=self.delete_forn).grid(row=5,column=0)
-        Button(self.janela2,text='Editar',command=self.edit_forn).grid(row=5,column=1)
+        Button(self.janela2,text='Deletar',command=self.delete_forn).grid(row=6,column=0)
+        Button(self.janela2,text='Editar').grid(row=6,column=1)
 
-        
+        #fornDAO = self.dao_factory.get_FornecedorDAO()
+
+        #fornDAO.create_table()
+
+        self.get_forns()
 
         self.janela2.mainloop()
 
 
     def add_forn(self):
+        
         nome = self.name2.get()
         cnpj = self.cnpj.get()
+        func = self.func.get()
+
         if(len(self.name2.get()) != 0 and len(self.cnpj.get()) != 0):
             
+            funcionario = self.dao_factory.get_FuncionarioDAO().get_from_name(func)
+
+            fornecedor = Fornecedor(nome,cnpj,funcionario)
+            fornDAO = self.dao_factory. get_FornecedorDAO()
+            fornDAO.insert(fornecedor)
+
             self.message['text'] = 'FORNECEDOR {} ADICIONADO COM SUCESSO '.format(self.name2.get())
             self.name2.delete(0,END)
             self.cnpj.delete(0,END)
+            self.func.delete(0,END)
             
-            
+            self.get_forns()
+
         else:
             self.message['text'] = 'POR FAVOR, INSIRA VALORES NOS CAMPOS FALTANTES!'
 
+
+
+    def get_forns(self):
+
+        fornDAO = self.dao_factory.get_FornecedorDAO()
+
+        records = self.tree.get_children()
+        for elements in records:
+            self.tree.delete(elements)
+        get_forn = fornDAO.get_forn_all(self.dao_factory)
+        for row in get_forn:
+            self.tree.insert('','end',text=row.nome,values=row.cnpj)
+
     def delete_forn(self):
-       
+        curItem = self.tree.focus()
+        contents = (self.tree.item(curItem))
+        selecteditem = contents['text']
+        
+        fornDAO = self.dao_factory.get_FornecedorDAO()
+        fornDAO.delete_one_forn(selecteditem)
+        self.tree.delete(curItem)
+
         self.message['text'] = 'FORNECEDOR DELETADO COM SUCESSO ! '
-'''    
+ 
     def edit_forn(self):
+        
+        fornDAO = self.dao_factory.get_FornecedorDAO()
+
         if(len(self.name2.get()) != 0):
-            Fornecedor_ORM.edit_forn_nome(self.tree,self.name2.get())
+
+            curItem = self.tree.focus()
+            contents = (self.tree.item(curItem))
+            selecteditem = contents['text']
+            fornDAO.edit_forn_nome(self.name2.get(), selecteditem)
+            self.get_forns()
+            self.message['text'] = 'NOME DO FORNECEDOR ATUALIZADO COM SUCESSO !'
+
         if(len(self.cnpj.get()) != 0):
-            Fornecedor_ORM.edit_forn_cnpj(self.tree,self.cnpj.get())
-'''        
+            curItem = self.tree.focus()
+            contents = (self.tree.item(curItem))
+            selecteditem = contents['text']
+            fornDAO.edit_forn_cnpj(self.cnpj.get())
+            self.get_func()
+            self.message['text'] = 'NOME DO FORNECEDOR ATUALIZADO COM SUCESSO !'
+        
         
 
 
 class Produto_Window:
-    def __init__(self):
+    def __init__(self,dao_factory):
+        self.dao_factory = dao_factory
+
         self.janela3 = Tk()
         self.janela3.geometry("650x500+100+100")
         self.janela3["bg"] = "pink"
@@ -255,7 +308,10 @@ class Produto_Window:
         self.tree.heading('#1',text='Nome',anchor=W)
         self.tree.heading('#2',text='Preco',anchor=W)
         Button(self.janela3,text='Deletar',command=self.delete_prod).grid(row=8,column=0)
-        Button(self.janela3,text='Editar',command=self.edit_prod).grid(row=8,column=1)
+        Button(self.janela3,text='Editar').grid(row=8,column=1)
+
+        #prodDAO = self.dao_factory.get_ProdutoDAO()
+        #prodDAO.create_table()
 
         self.janela3.mainloop()
 
@@ -263,9 +319,17 @@ class Produto_Window:
         nome = self.name3.get()
         preco = self.price.get()
         quantidade = self.quant.get()
-        fornecedor = self.forn.get()
-        funcionario = self.func.get()
+        forn = self.forn.get()
+        func = self.func.get()
         if(len(self.name3.get()) != 0 and len(self.price.get()) != 0 and len(self.quant.get()) != 0 ):
+
+            funcionario = self.dao_factory.get_FuncionarioDAO().get_from_name(func)
+            fornecedor = self.dao_factory.get_FornecedorDAO().get_from_name(forn)
+
+            produto = Produto(nome,preco,quantidade,funcionario,fornecedor)
+            produto_dao = self.dao_factory.get_ProdutoDAO()
+            produto_dao.insert(produto)
+
             self.message['text'] = 'PRODUTO {} ADICIONADO COM SUCESSO '.format(nome)
             self.name3.delete(0,END)
             self.price.delete(0,END)
@@ -274,6 +338,7 @@ class Produto_Window:
             self.func.delete(0,END)
             
         else:
+
             self.message['text'] = 'POR FAVOR, INSIRA VALORES NOS CAMPOS FALTANTES!'
 
     def delete_prod(self):
