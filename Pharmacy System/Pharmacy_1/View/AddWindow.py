@@ -66,7 +66,7 @@ class Funcionario_Window:
             #Linha 65 deverá ser tratada no arquivo control
             func = Funcionario(nome,cpf,sexo,anoNascimento)
             funcDAO = self.dao_factory.get_FuncionarioDAO()
-            funcDAO.insert(func)
+            funcDAO.insert_func(func)
             
             self.message['text'] = 'Funcionario {} ADICIONADO COM SUCESSO '.format(self.name.get())
             self.name.delete(0,END)
@@ -120,7 +120,7 @@ class Funcionario_Window:
             self.get_func()
             self.message['text'] = 'NOME DO FUNCIONÁRIO ATUALIZADO COM SUCESSO !'
 
-        if(len(self.cpf.get()) != 0):
+        elif(len(self.cpf.get()) != 0):
             curItem = self.tree.focus()
             contents = (self.tree.item(curItem))
             selecteditem = contents['text']
@@ -128,7 +128,7 @@ class Funcionario_Window:
             self.get_func()
             self.message['text'] = 'CPF DO FUNCIONÁRIO ATUALIZADO COM SUCESSO !'
 
-        if(len(self.sexo.get()) != 0):
+        elif(len(self.sexo.get()) != 0):
             curItem = self.tree.focus()
             contents = (self.tree.item(curItem))
             selecteditem = contents['text']
@@ -136,7 +136,7 @@ class Funcionario_Window:
             self.get_func()
             self.message['text'] = 'SEXO DO FUNCIONÁRIO ATUALIZADO COM SUCESSO !'
 
-        if(len(self.anoNascimento.get()) != 0):
+        elif(len(self.anoNascimento.get()) != 0):
             curItem = self.tree.focus()
             contents = (self.tree.item(curItem))
             selecteditem = contents['text']
@@ -205,7 +205,7 @@ class Fornecedor_Window:
 
             fornecedor = Fornecedor(nome,cnpj,funcionario)
             fornDAO = self.dao_factory. get_FornecedorDAO()
-            fornDAO.insert(fornecedor)
+            fornDAO.insert_forn(fornecedor)
 
             self.message['text'] = 'FORNECEDOR {} ADICIONADO COM SUCESSO '.format(self.name2.get())
             self.name2.delete(0,END)
@@ -254,7 +254,7 @@ class Fornecedor_Window:
             self.get_forns()
             self.message['text'] = 'NOME DO FORNECEDOR ATUALIZADO COM SUCESSO !'
 
-        if(len(self.cnpj.get()) != 0):
+        elif(len(self.cnpj.get()) != 0):
             curItem = self.tree.focus()
             contents = (self.tree.item(curItem))
             selecteditem = contents['text']
@@ -304,14 +304,16 @@ class Produto_Window:
         
         self.tree = ttk.Treeview(self.janela3,height=10,columns=('Id','Nome'))
         self.tree.grid(row=7,column=0,columnspan=3)
-        self.tree.heading('#0',text='Id',anchor=W)
-        self.tree.heading('#1',text='Nome',anchor=W)
-        self.tree.heading('#2',text='Preco',anchor=W)
+        self.tree.heading('#0',text='Nome',anchor=W)
+        self.tree.heading('#1',text='Preco',anchor=W)
+        self.tree.heading('#2',text='Quantidade',anchor=W)
         Button(self.janela3,text='Deletar',command=self.delete_prod).grid(row=8,column=0)
-        Button(self.janela3,text='Editar').grid(row=8,column=1)
+        Button(self.janela3,text='Editar',command=self.edit_prod).grid(row=8,column=1)
 
         #prodDAO = self.dao_factory.get_ProdutoDAO()
         #prodDAO.create_table()
+
+        self.get_prods()
 
         self.janela3.mainloop()
 
@@ -326,10 +328,10 @@ class Produto_Window:
             funcionario = self.dao_factory.get_FuncionarioDAO().get_from_name(func)
             fornecedor = self.dao_factory.get_FornecedorDAO().get_from_name(forn)
 
-            produto = Produto(nome,preco,quantidade,funcionario,fornecedor)
-            produto_dao = self.dao_factory.get_ProdutoDAO()
-            produto_dao.insert(produto)
-
+            produto = Produto(nome,preco,quantidade,fornecedor, funcionario)
+            produto_dao = self.dao_factory.get_ProdutoDAO() 
+            produto_dao.insert_prod(produto)
+            self.get_prods()
             self.message['text'] = 'PRODUTO {} ADICIONADO COM SUCESSO '.format(nome)
             self.name3.delete(0,END)
             self.price.delete(0,END)
@@ -341,14 +343,52 @@ class Produto_Window:
 
             self.message['text'] = 'POR FAVOR, INSIRA VALORES NOS CAMPOS FALTANTES!'
 
+    def get_prods(self):
+
+        prodDAO = self.dao_factory.get_ProdutoDAO()
+
+        records = self.tree.get_children()
+        for elements in records:
+            self.tree.delete(elements)
+        get_prod = prodDAO.get_prod_all(self.dao_factory)
+        for row in get_prod:
+            self.tree.insert('','end',text=row.nome,values=(row.preco,row.quantidade))
+
+
     def delete_prod(self):
+        curItem = self.tree.focus()
+        contents = (self.tree.item(curItem))
+        selecteditem = contents['text']
         
+        prodDAO = self.dao_factory.get_ProdutoDAO()
+        prodDAO.delete_one_prod(selecteditem)
+        self.tree.delete(curItem)
+
         self.message['text'] = 'PRODUTO DELETADO COM SUCESSO !'
-'''
+
     def edit_prod(self):
+        prodDAO = self.dao_factory.get_ProdutoDAO()
+
         if(len(self.name3.get()) != 0):
-            
-        if(len(self.price.get()) != 0):
-           
-        if(len(self.quant.get()) != 0):
-   '''     
+            curItem = self.tree.focus()
+            contents = (self.tree.item(curItem))
+            selecteditem = contents['text']
+            prodDAO.edit_prod_nome(self.name3.get(), selecteditem)
+            self.get_prods()
+            self.message['text'] = 'NOME DO PRODUTO ATUALIZADO COM SUCESSO !'
+
+        elif(len(self.price.get()) != 0):
+            curItem = self.tree.focus()
+            contents = (self.tree.item(curItem))
+            selecteditem = contents['text']
+            prodDAO.edit_prod_price(self.price.get(),selecteditem)
+            self.get_prods()
+            self.message['text'] = 'PRECO DO PRODUTO ATUALIZADO COM SUCESSO !'
+
+        elif(len(self.quant.get()) != 0):
+            curItem = self.tree.focus()
+            contents = (self.tree.item(curItem))
+            selecteditem = contents['text']
+            prodDAO.edit_prod_quant(self.quant.get(),selecteditem)
+            self.get_prods()
+            self.message['text'] = 'QUANTIDADE DO FORNECEDOR ATUALIZADO COM SUCESSO !'

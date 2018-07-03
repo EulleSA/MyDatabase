@@ -15,7 +15,7 @@ class FuncionarioDAO:
     def detele_table(self):
         self.db.execute("DROP TABLE IF EXISTS Funcionario")
 
-    def insert(self,funcionario):
+    def insert_func(self,funcionario):
         sql_string = "INSERT INTO Funcionario (nome, cpf, sexo, anoNascimento) VALUES (%s, %s, %s, %s)"
         self.db.execute(sql_string, (funcionario.nome, funcionario.cpf, funcionario.sexo,funcionario.anoNascimento))
 
@@ -89,7 +89,7 @@ class FornecedorDAO:
     def detele_table(self):
         self.db.execute("DROP TABLE IF EXISTS Fornecedor")
 
-    def insert(self,fornecedor):
+    def insert_forn(self,fornecedor):
 
         sql_string = "SELECT id FROM funcionario WHERE nome = %s"
         self.db.execute(sql_string, (fornecedor.funcionario.nome,))
@@ -125,9 +125,9 @@ class FornecedorDAO:
         sql_string = "UPDATE fornecedor SET nome = %s WHERE nome = %s"
         self.db.execute(sql_string, (new_name, old_name))
 
-    def edit_forn_cnpj(self,cnpj):
+    def edit_forn_cnpj(self,cnpj, nome):
         sql_string = "UPDATE fornecedor SET cnpj = %s WHERE nome = %s"
-        self.db.execute(sql_string,(cnpj,))
+        self.db.execute(sql_string,(cnpj,nome))
 
 
     def get_from_name(self, nome):
@@ -137,9 +137,9 @@ class FornecedorDAO:
         try:
             row = self.db.fetchone()
             cnpj = row[2]
-            fornecedor_id = row[3]
+            funcionario_id = row[3]
 
-            fornecedor = Fornecedor(nome, cnpj,fornecedor_id)
+            fornecedor = Fornecedor(nome, cnpj,funcionario_id)
             return fornecedor
 
         except ProgrammingError:
@@ -147,6 +147,7 @@ class FornecedorDAO:
 
 
 class ProdutoDAO:
+    
     def __init__(self,db):
         self.db =  db
 
@@ -158,18 +159,53 @@ class ProdutoDAO:
     def detele_table(self):
         self.db.execute("DROP TABLE IF EXISTS Produto")
 
-    def insert(self,produto):
+    def insert_prod(self,produto):
         sql_string = "SELECT id FROM fornecedor WHERE nome = %s"
         self.db.execute(sql_string, (produto.fornecedor.nome,))
         fornecedor_id = self.db.fetchone()[0]
 
-        sql_string = "SELECT id FROM funcionario WHERE name = %s"
+        sql_string = "SELECT id FROM funcionario WHERE nome = %s"
         self.db.execute(sql_string, (produto.funcionario.nome,))
         funcionario_id = self.db.fetchone()[0]
 
         sql_string = "INSERT INTO Produto (nome, preco, quantidade, fornecedor_id, funcionario_id) VALUES (%s, %s, %s, %s, %s)"
-        self.db.execute(sql_string,(produto.nome,produto.preco,produto.fornecedor_id, produto.funcionario_id))
+        self.db.execute(sql_string,(produto.nome, produto.preco, produto.quantidade, fornecedor_id, funcionario_id))
 
 
+    def get_prod_all(self,fornecedor):
+        sql_string = "SELECT * FROM produto"
+        self.db.execute(sql_string)
 
-    
+        rows = self.db.fetchall()
+
+        produtos = []
+
+        for row in rows:
+            nome = row[1]
+            preco = row[2]
+            quantidade = row[3]
+            fornecedor_id = row[4]
+            funcionario_id = row[5]
+
+            produto = Produto(nome, preco, quantidade, fornecedor_id, funcionario_id)
+            produtos.append(produto)
+
+        return produtos
+
+
+    def delete_one_prod(self,produto):
+        sql_string = "DELETE FROM produto WHERE nome = %s"
+        self.db.execute(sql_string,(produto,))
+
+
+    def edit_prod_nome(self, new_name , old_name):
+        sql_string = "UPDATE produto SET nome = %s WHERE nome = %s"
+        self.db.execute(sql_string, (new_name, old_name))
+
+    def edit_prod_price(self,preco,nome):
+        sql_string = "UPDATE produto SET preco = %s WHERE nome = %s"
+        self.db.execute(sql_string,(preco,nome))
+
+    def edit_prod_quant(self,quantidade, nome):
+        sql_string = "UPDATE produto SET quantidade = %s WHERE nome = %s"
+        self.db.execute(sql_string,(quantidade,nome))
